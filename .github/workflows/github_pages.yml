@@ -1,0 +1,16 @@
+name: Deply to Github Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'beta'
+      - uses: erickzanardo/flutter-gh-pages@v2
