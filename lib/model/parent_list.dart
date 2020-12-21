@@ -1,41 +1,59 @@
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter/cupertino.dart';
 
-class ParentList {
-  const ParentList(this.title);
+/// The model for a single List/Note in the context of our app.
+class ListModel {
+  const ListModel(
+    this.title, {
+    this.listItems = const [],
+  });
+
+  /// The title of the list.
   final String title;
+
+  final List<ListItem> listItems;
 }
 
-class HomeListsNotifier extends StateNotifier<List<ParentList>> {
-  HomeListsNotifier()
-      : super([
-          ParentList("Costco"),
-          ParentList("Safeway"),
-          ParentList("Vons"),
-          ParentList("Ralph's"),
-          ParentList("Traber Jerbs"),
-        ]);
+class ListItem {
+  const ListItem(
+    this.title, {
+    this.isChecked = false,
+  });
+
+  final String title;
+  final bool isChecked;
+}
+
+class HomeListModel with ChangeNotifier {
+  List<ListModel> _lists = [
+    ListModel("Costco"),
+    ListModel("Safeway"),
+    ListModel("Vons"),
+    ListModel("Ralph's"),
+    ListModel("Traber Jerbs"),
+  ];
+
+  List<ListModel> get lists => _lists;
 
   void addList(String title) {
-    state = [
-      ...state + [ParentList(title)]
-    ];
+    _lists += [ListModel(title)];
+    notifyListeners();
   }
 
   void removeList(String title) {
-    state = [
-      for (final parentList in state)
+    _lists = [
+      for (final parentList in _lists)
         if (parentList.title != title) parentList,
     ];
+    notifyListeners();
   }
 
   void reorderList(int oldIndex, int newIndex) {
-    var existingList = state;
     if (newIndex > oldIndex) {
       // removing the item at oldIndex will shorten the list by 1.
       newIndex -= 1;
     }
-    final ParentList element = existingList.removeAt(oldIndex);
-    existingList.insert(newIndex, element);
-    state = existingList;
+    final ListModel element = _lists.removeAt(oldIndex);
+    _lists.insert(newIndex, element);
+    notifyListeners();
   }
 }
