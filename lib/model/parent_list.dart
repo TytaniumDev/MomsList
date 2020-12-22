@@ -1,59 +1,42 @@
-import 'package:flutter/cupertino.dart';
+import 'package:equatable/equatable.dart';
 
 /// The model for a single List/Note in the context of our app.
-class ListModel {
+class ListModel with EquatableMixin {
   const ListModel(
     this.title, {
-    this.listItems = const [],
+    this.listItems = const {},
   });
 
   /// The title of the list.
+  ///
+  /// This also serves as the unique identifier for this object.
   final String title;
 
-  final List<ListItem> listItems;
+  /// A set of all of the [ListItem]s contained in this list.
+  ///
+  /// [ListItem]s, like [ListModel]s, are uniquely identified by their title.
+  /// This set will always be unsorted!
+  final Set<ListItem> listItems;
+
+  @override
+  List<Object?> get props => [title];
 }
 
-class ListItem {
+/// The model for a individual line item inside of a List.
+class ListItem  with EquatableMixin {
   const ListItem(
     this.title, {
     this.isChecked = false,
   });
 
+  /// The title of the item.
+  ///
+  /// This also serves as the unique identifier for this object.
   final String title;
+
+  /// If this item is checked off or not.
   final bool isChecked;
-}
 
-class HomeListModel with ChangeNotifier {
-  List<ListModel> _lists = [
-    ListModel("Costco"),
-    ListModel("Safeway"),
-    ListModel("Vons"),
-    ListModel("Ralph's"),
-    ListModel("Traber Jerbs"),
-  ];
-
-  List<ListModel> get lists => _lists;
-
-  void addList(String title) {
-    _lists += [ListModel(title)];
-    notifyListeners();
-  }
-
-  void removeList(String title) {
-    _lists = [
-      for (final parentList in _lists)
-        if (parentList.title != title) parentList,
-    ];
-    notifyListeners();
-  }
-
-  void reorderList(int oldIndex, int newIndex) {
-    if (newIndex > oldIndex) {
-      // removing the item at oldIndex will shorten the list by 1.
-      newIndex -= 1;
-    }
-    final ListModel element = _lists.removeAt(oldIndex);
-    _lists.insert(newIndex, element);
-    notifyListeners();
-  }
+  @override
+  List<Object?> get props => [title];
 }
