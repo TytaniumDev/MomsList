@@ -3,14 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:moms_list/repositories/notifiers.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends Page {
+  final ValueChanged<String> onListTapped;
+
+  HomePage(this.onListTapped);
+
+  Route createRoute(BuildContext context) {
+    return CupertinoPageRoute(
+      settings: this,
+      builder: (BuildContext context) {
+        return HomePageContent(
+          onListTapped: onListTapped,
+        );
+      },
+    );
+  }
+}
+
+class HomePageContent extends StatelessWidget {
+  final ValueChanged<String> onListTapped;
+
+  const HomePageContent({Key? key, required this.onListTapped})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "Mom's List",
-          style: TextStyle(color: Theme.of(context).textTheme.headline1?.color),
+          style: TextStyle(color: Theme
+              .of(context)
+              .textTheme
+              .headline1
+              ?.color),
         ),
         backgroundColor: Colors.yellow,
         actions: [
@@ -23,12 +49,17 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: _HomePageLists(),
+      body: _HomePageLists(onListTapped: onListTapped,),
     );
   }
 }
 
 class _HomePageLists extends StatelessWidget {
+  final ValueChanged<String> onListTapped;
+
+  const _HomePageLists({Key? key, required this.onListTapped})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeListViewModel>(
@@ -42,10 +73,10 @@ class _HomePageLists extends StatelessWidget {
                   labelText: "Add a List",
                   labelStyle: TextStyle(color: Colors.black),
                 ),
-                onSubmitted: (text) => {
+                onSubmitted: (text) =>
+                {
                   Provider.of<HomeListViewModel>(context, listen: false)
                       .addList(text),
-
                 },
               ),
             ),
@@ -56,11 +87,13 @@ class _HomePageLists extends StatelessWidget {
                     ListTile(
                       key: ValueKey(list.title),
                       title: Text(list.title),
+                      onTap: () => onListTapped(list.title),
                     )
                 ],
                 onReorder:
-                    Provider.of<HomeListViewModel>(context, listen: false)
-                        .reorderList,
+                Provider
+                    .of<HomeListViewModel>(context, listen: false)
+                    .reorderList,
               ),
             ),
           ],
