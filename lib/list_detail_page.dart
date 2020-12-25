@@ -30,6 +30,11 @@ class ListDetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: TextField(
+          decoration: InputDecoration(
+            labelText: "Title"
+          ),
+        ),
         actions: [
           IconButton(icon: Icon(Icons.edit), onPressed: () {}),
           IconButton(icon: Icon(Icons.sort), onPressed: () {}),

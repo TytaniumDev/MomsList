@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:moms_list/navigation.dart';
-import 'package:moms_list/repositories/notifiers.dart';
-import 'package:provider/provider.dart';
+import 'package:moms_list/repositories/app_model_repository.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => HomeListViewModel())],
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    Provider.of<HomeListViewModel>(context, listen: false).init();
     return MaterialApp.router(
       title: "Mom's List",
       theme: ThemeData(),
@@ -24,3 +20,11 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+/// Creates an [AppModelRepository] and initialise it.
+///
+/// We are using [StateNotifierProvider] here as AppModel is a complex
+/// object, with advanced business logic and functions.
+final appModelProvider = StateNotifierProvider<AppModelRepository>((ref) {
+  return AppModelRepository(null);
+});
