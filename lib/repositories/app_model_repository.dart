@@ -12,8 +12,7 @@ class AppModelRepository extends StateNotifier<AppModel> {
   }
 
   void init() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // _lists = prefs.getStringList(listsKey).map((e) => ListModel(e)).toList();
+    readFromSharedPrefs();
   }
 
   void addList(MomList list) {
@@ -24,15 +23,19 @@ class AppModelRepository extends StateNotifier<AppModel> {
       ]).toList(),
     );
 
-    // addToSharedPrefs(list);
-
     state = newAppModel;
+    writeToSharedPrefs();
   }
 
-  // void addToSharedPrefs(String title) async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setStringList(listsKey, _lists.map((e) => e.title).toList());
-  // }
+  void writeToSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(listsKey, state.toJson());
+  }
+
+  void readFromSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    state = AppModel.fromJson(prefs.getString(listsKey));
+  }
 
   void removeList(MomList list) {
     final newAppModel = state.copyWith(
@@ -41,9 +44,9 @@ class AppModelRepository extends StateNotifier<AppModel> {
       ],
     );
 
-    // Remove from shared prefs
 
     state = newAppModel;
+    writeToSharedPrefs();
   }
 
   void reorderList(int oldIndex, int newIndex) {
@@ -55,8 +58,10 @@ class AppModelRepository extends StateNotifier<AppModel> {
     final MomList element = existingList.removeAt(oldIndex);
     existingList.insert(newIndex, element);
 
-    print("*** Old list: ${state.lists.map((e) => e.title)}\n\n*** New list:${existingList.map((e) => e.title)}");
+    print(
+        "*** Old list: ${state.lists.map((e) => e.title)}\n\n*** New list:${existingList.map((e) => e.title)}");
 
     state = state.copyWith(lists: existingList);
+    writeToSharedPrefs();
   }
 }

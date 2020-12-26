@@ -4,7 +4,7 @@ import 'package:moms_list/navigation.dart';
 import 'package:moms_list/repositories/app_model_repository.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(observers: [Logger()], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,3 +28,14 @@ class MyApp extends StatelessWidget {
 final appModelProvider = StateNotifierProvider<AppModelRepository>((ref) {
   return AppModelRepository(null);
 });
+
+class Logger extends ProviderObserver {
+  @override
+  void didUpdateProvider(ProviderBase provider, Object newValue) {
+    print('''
+{
+  "provider": "${provider.name ?? provider.runtimeType}",
+  "newValue": "$newValue"
+}''');
+  }
+}

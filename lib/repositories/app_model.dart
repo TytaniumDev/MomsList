@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,19 +29,37 @@ class AppModel {
       );
 
   @override
-  bool operator ==(Object other) {
-    final decision = identical(this, other) ||
-        other is AppModel &&
-            runtimeType == other.runtimeType &&
-            lists == other.lists;
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
-    print("***Doing equality operation, result is $decision");
-
-    return decision;
+    return o is AppModel && listEquals(o.lists, lists);
   }
 
   @override
   int get hashCode => lists.hashCode;
+
+  /// Generated Code
+
+  Map<String, dynamic> toMap() {
+    return {
+      'lists': lists.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory AppModel.fromMap(Map<String, dynamic> map) {
+    return AppModel(
+      lists: List<MomList>.from(map['lists']?.map((x) => MomList.fromMap(x))),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory AppModel.fromJson(String source) =>
+      AppModel.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'AppModel(lists: $lists)';
 }
 
 /// The model for a single List/Note in the context of our app.
@@ -68,7 +89,7 @@ class MomList with EquatableMixin {
   final Set<MomListItem> listItems;
 
   @override
-  List<Object?> get props => [id];
+  List<Object> get props => [id, title, currentSort, listItems];
 
   MomList copyWith({
     String? title,
@@ -82,6 +103,35 @@ class MomList with EquatableMixin {
         currentSort: currentSort ?? this.currentSort,
         id: id ?? this.id,
       );
+
+  /// Generated Code
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'currentSort': currentSort.toMap(),
+      'listItems': listItems.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory MomList.fromMap(Map<String, dynamic> map) {
+    return MomList(
+      map['title'],
+      id: map['id'],
+      currentSort: MomListSort.fromMap(map['currentSort']),
+      listItems: Set<MomListItem>.from(
+          map['listItems']?.map((x) => MomListItem.fromMap(x))),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory MomList.fromJson(String source) =>
+      MomList.fromMap(json.decode(source));
+
+  @override
+  bool get stringify => true;
 }
 
 /// The model for a individual line item inside of a List.
@@ -104,14 +154,44 @@ class MomListItem with EquatableMixin {
   final bool isChecked;
 
   @override
-  List<Object?> get props => [id];
+  List<Object> get props => [id, title, isChecked];
 
-  MomListItem copyWith({String? title, bool? isChecked, String? id}) =>
+  MomListItem copyWith({
+    String? id,
+    String? title,
+    bool? isChecked,
+  }) =>
       MomListItem(
         title ?? this.title,
-        isChecked: isChecked ?? this.isChecked,
         id: id ?? this.id,
+        isChecked: isChecked ?? this.isChecked,
       );
+
+  /// Generated Code
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'isChecked': isChecked,
+    };
+  }
+
+  factory MomListItem.fromMap(Map<String, dynamic> map) {
+    return MomListItem(
+      map['title'],
+      id: map['id'],
+      isChecked: map['isChecked'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory MomListItem.fromJson(String source) =>
+      MomListItem.fromMap(json.decode(source));
+
+  @override
+  bool get stringify => true;
 }
 
 class MomListSort {
@@ -123,6 +203,52 @@ class MomListSort {
   final ListSort sortType;
 
   final bool autoSortEnabled;
+
+  MomListSort copyWith({
+    ListSort? sortType,
+    bool? autoSortEnabled,
+  }) =>
+      MomListSort(
+        sortType: sortType ?? this.sortType,
+        autoSortEnabled: autoSortEnabled ?? this.autoSortEnabled,
+      );
+
+  /// Generated Code
+
+  Map<String, dynamic> toMap() {
+    return {
+      'sortType': sortType.toString(),
+      'autoSortEnabled': autoSortEnabled,
+    };
+  }
+
+  factory MomListSort.fromMap(Map<String, dynamic> map) {
+    return MomListSort(
+      sortType: ListSort.values.firstWhere((element) => element.toString() == map['sortType']),
+      autoSortEnabled: map['autoSortEnabled'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory MomListSort.fromJson(String source) =>
+      MomListSort.fromMap(json.decode(source));
+
+  @override
+  String toString() =>
+      'MomListSort(sortType: $sortType, autoSortEnabled: $autoSortEnabled)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is MomListSort &&
+        o.sortType == sortType &&
+        o.autoSortEnabled == autoSortEnabled;
+  }
+
+  @override
+  int get hashCode => sortType.hashCode ^ autoSortEnabled.hashCode;
 }
 
 enum ListSort {

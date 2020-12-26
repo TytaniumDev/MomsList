@@ -5,8 +5,8 @@ import 'package:moms_list/main.dart';
 import 'package:moms_list/repositories/app_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final orderedMomListProvider = Provider<List<MomList>>((ref) {
-  return ref.watch(appModelProvider.state).lists;
+final orderedMomListProvider = Provider<Iterable<MomList>>((ref) {
+ return ref.watch(appModelProvider.state).lists.where((_) => true);
 });
 
 class HomePage extends Page {
@@ -66,7 +66,6 @@ class _HomePageLists extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final lists = useProvider(orderedMomListProvider);
-    print("***** Rebuilding with list: $lists");
 
     return Column(
       children: [
@@ -89,7 +88,7 @@ class _HomePageLists extends HookWidget {
                 ListTile(
                   key: ValueKey(list.title),
                   title: Text(list.title),
-                  onTap: () => onListTapped(list.title),
+                  onTap: () => onListTapped(list.id),
                 )
             ],
             onReorder: (oldIndex, newIndex) =>
