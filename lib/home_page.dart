@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -5,8 +6,24 @@ import 'package:moms_list/main.dart';
 import 'package:moms_list/repositories/app_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final orderedMomListProvider = Provider<Iterable<MomList>>((ref) {
- return ref.watch(appModelProvider.state).lists.where((_) => true);
+class MomListViewModel with EquatableMixin {
+  final String title;
+  final String id;
+
+  const MomListViewModel(this.title, this.id);
+
+  @override
+  List<Object?> get props => [title, id];
+
+  @override
+  bool? get stringify => true;
+}
+
+final orderedMomListProvider = Provider<Iterable<MomListViewModel>>((ref) {
+  return ref
+      .watch(appModelProvider.state)
+      .lists
+      .map((e) => MomListViewModel(e.title, e.id));
 });
 
 class HomePage extends Page {

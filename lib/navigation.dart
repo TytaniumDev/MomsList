@@ -65,7 +65,7 @@ class MomsListRouterDelegate extends RouterDelegate<MomsListRoutePath>
         if (show404)
           CupertinoPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
         else if (_selectedListId != null)
-          ListDetailPage(listId: _selectedListId!)
+          ListDetailPage(listId: _selectedListId!, navigateHome: _navigateHome)
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
@@ -102,6 +102,11 @@ class MomsListRouterDelegate extends RouterDelegate<MomsListRoutePath>
     }
 
     show404 = false;
+  }
+
+  void _navigateHome() {
+    _selectedListId = null;
+    notifyListeners();
   }
 
   void _handleListTapped(String listId) {

@@ -7,16 +7,22 @@ void main() {
   runApp(ProviderScope(observers: [Logger()], child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MyApp();
+}
+
+class _MyApp extends State<MyApp> {
+  MomsListRouterDelegate _routerDelegate = MomsListRouterDelegate();
+  MomsListRouteInformationParser _routeInformationParser = MomsListRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: "Mom's List",
       theme: ThemeData(),
-      routerDelegate: MomsListRouterDelegate(),
-      routeInformationParser: MomsListRouteInformationParser(),
+      routerDelegate: _routerDelegate,
+      routeInformationParser: _routeInformationParser,
     );
   }
 }

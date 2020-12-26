@@ -66,7 +66,7 @@ class AppModel {
 class MomList with EquatableMixin {
   MomList(
     this.title, {
-    this.listItems = const {},
+    this.listItems = const [],
     this.currentSort = const MomListSort(),
     String? id,
   }) : id = id ?? _uuid.v4();
@@ -83,10 +83,7 @@ class MomList with EquatableMixin {
   final MomListSort currentSort;
 
   /// A set of all of the [MomListItem]s contained in this list.
-  ///
-  /// [MomListItem]s, like [MomList]s, are uniquely identified by their title.
-  /// This set will always be unsorted!
-  final Set<MomListItem> listItems;
+  final List<MomListItem> listItems;
 
   @override
   List<Object> get props => [id, title, currentSort, listItems];
@@ -94,7 +91,7 @@ class MomList with EquatableMixin {
   MomList copyWith({
     String? title,
     MomListSort? currentSort,
-    Set<MomListItem>? listItems,
+    List<MomListItem>? listItems,
     String? id,
   }) =>
       MomList(
@@ -120,7 +117,7 @@ class MomList with EquatableMixin {
       map['title'],
       id: map['id'],
       currentSort: MomListSort.fromMap(map['currentSort']),
-      listItems: Set<MomListItem>.from(
+      listItems: List<MomListItem>.from(
           map['listItems']?.map((x) => MomListItem.fromMap(x))),
     );
   }
