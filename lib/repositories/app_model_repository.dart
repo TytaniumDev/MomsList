@@ -96,6 +96,20 @@ class AppModelRepository extends StateNotifier<AppModel> {
 
     updateState(newAppModel);
   }
+
+  void removeListItem(String listItemId) {
+    final newAppModel = state.copyWith(lists: [
+      for (final momList in state.lists)
+        if (momList.listItems.any((element) => element.id == listItemId))
+          momList.copyWith(listItems: [
+            ...momList.listItems.where((element) => element.id != listItemId),
+          ])
+        else
+          momList
+    ]);
+
+    updateState(newAppModel);
+  }
   
   void updateListItemTitle(String listItemId, String newTitle) {
     final newAppModel = state.copyWith(lists: [

@@ -105,6 +105,7 @@ class _HomePageLists extends HookWidget {
                 ListTile(
                   key: ValueKey(list.title),
                   title: Text(list.title),
+                  trailing: Icon(Icons.reorder_rounded),
                   onTap: () => onListTapped(list.id),
                 )
             ],

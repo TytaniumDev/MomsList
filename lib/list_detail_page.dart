@@ -21,8 +21,11 @@ final listItemsProvider =
 
 final sortedListItemsProvider =
     Provider.family<List<MomListItem>, String>((ref, listId) {
-  final unsortedListItems = ref.watch(listItemsProvider(listId));
+  final listItems = ref.watch(listItemsProvider(listId));
   final sortOrder = ref.watch(listDetailProvider(listId)).currentSort.sortType;
+
+  // Make a new empty list if there aren't any items in the list currently.
+  final unsortedListItems = listItems.isEmpty ? <MomListItem>[] : listItems;
 
   switch (sortOrder) {
     case ListSort.alphabetical:
@@ -83,45 +86,78 @@ class ListDetailContent extends HookWidget {
         title: Text(momList.title),
         actions: [
           IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                editMode.state = !editMode.state;
-              }),
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              editMode.state = !editMode.state;
+            },
+          ),
           IconButton(
-              icon: Icon(Icons.sort),
-              onPressed: () {
-                context.read(appModelProvider).setSortOrder(
+            icon: Icon(
+              momList.currentSort.sortType == ListSort.alphabetical
+                  ? Icons.playlist_add_check
+                  : Icons.sort_by_alpha,
+            ),
+            onPressed: () {
+              context.read(appModelProvider).setSortOrder(
                     listId,
                     momList.currentSort.copyWith(
-                        sortType: momList.currentSort.sortType ==
-                                ListSort.alphabetical
-                            ? ListSort.status
-                            : ListSort.alphabetical));
-              }),
+                      sortType:
+                          momList.currentSort.sortType == ListSort.alphabetical
+                              ? ListSort.status
+                              : ListSort.alphabetical,
+                    ),
+                  );
+            },
+          ),
           IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                context.read(appModelProvider).removeList(listId);
-                navigateHome();
-              }),
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Delete Item"),
+                    content: Text(
+                        "Are you sure you want to delete ${momList.title}?"),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          context.read(appModelProvider).removeList(listId);
+                          navigateHome();
+                        },
+                        child: Text("Delete"),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: "Add a List Item",
-                labelStyle: TextStyle(color: Colors.black),
+          if (editMode.state)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: "Add a List Item",
+                  labelStyle: TextStyle(color: Colors.black),
+                ),
+                onSubmitted: (text) => {
+                  context
+                      .read(appModelProvider)
+                      .addListItem(listId, MomListItem(text)),
+                },
               ),
-              onSubmitted: (text) => {
-                context
-                    .read(appModelProvider)
-                    .addListItem(listId, MomListItem(text)),
-              },
             ),
-          ),
           Expanded(
             child: MomListItems(listId: listId),
           ),
@@ -148,19 +184,42 @@ class MomListItems extends HookWidget {
           sizeFraction: 0.7,
           curve: Curves.easeInOutSine,
           animation: animation,
-          child: CheckboxListTile(
-            key: ValueKey(listItem.title),
-            title: ProviderScope(
-              overrides: [listItemProvider.overrideWithValue(listItem)],
-              child: const ListItemTitle(),
+          child: Dismissible(
+            key: ValueKey(listItem.id),
+            background: Container(
+              color: Colors.red,
+              alignment: AlignmentDirectional.centerEnd,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Icon(Icons.delete),
+              ),
             ),
-            onChanged: (bool? value) {
-              if (value != null)
-                context
-                    .read(appModelProvider)
-                    .toggleListItem(listItem.id, value);
+            onDismissed: (_) {
+              context.read(appModelProvider).removeListItem(listItem.id);
             },
-            value: listItem.isChecked,
+            resizeDuration: null,
+            direction: DismissDirection.endToStart,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom:
+                    Divider.createBorderSide(context, color: Colors.black38),
+              )),
+              child: CheckboxListTile(
+                key: ValueKey(listItem.title),
+                title: ProviderScope(
+                  overrides: [listItemProvider.overrideWithValue(listItem)],
+                  child: const ListItemTitle(),
+                ),
+                onChanged: (bool? value) {
+                  if (value != null)
+                    context
+                        .read(appModelProvider)
+                        .toggleListItem(listItem.id, value);
+                },
+                value: listItem.isChecked,
+              ),
+            ),
           ),
         );
       },
