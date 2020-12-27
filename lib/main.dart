@@ -5,7 +5,14 @@ import 'package:moms_list/navigation.dart';
 import 'package:moms_list/repositories/app_model_repository.dart';
 
 void main() {
-  runApp(ProviderScope(observers: [Logger()], child: MyApp()));
+  runApp(ProviderScopedApp());
+}
+
+class ProviderScopedApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(observers: [Logger()], child: MyApp());
+  }
 }
 
 class MyApp extends StatefulWidget {
