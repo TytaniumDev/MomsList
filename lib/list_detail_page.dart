@@ -14,20 +14,15 @@ final listDetailProvider = Provider.family<MomList, String>((ref, listId) {
 });
 
 final listItemsProvider =
-Provider.family<List<MomListItem>, String>((ref, listId) {
+    Provider.family<List<MomListItem>, String>((ref, listId) {
   final appModel = ref.watch(appModelProvider.state);
-  return appModel.lists
-      .firstWhere((element) => element.id == listId)
-      .listItems;
+  return appModel.lists.firstWhere((element) => element.id == listId).listItems;
 });
 
 final sortedListItemsProvider =
-Provider.family<List<MomListItem>, String>((ref, listId) {
+    Provider.family<List<MomListItem>, String>((ref, listId) {
   final unsortedListItems = ref.watch(listItemsProvider(listId));
-  final sortOrder = ref
-      .watch(listDetailProvider(listId))
-      .currentSort
-      .sortType;
+  final sortOrder = ref.watch(listDetailProvider(listId)).currentSort.sortType;
 
   switch (sortOrder) {
     case ListSort.alphabetical:
@@ -99,14 +94,16 @@ class ListDetailContent extends HookWidget {
                     listId,
                     momList.currentSort.copyWith(
                         sortType: momList.currentSort.sortType ==
-                            ListSort.alphabetical
+                                ListSort.alphabetical
                             ? ListSort.status
                             : ListSort.alphabetical));
               }),
-          IconButton(icon: Icon(Icons.delete), onPressed: () {
-            context.read(appModelProvider).removeList(listId);
-            navigateHome();
-          }),
+          IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                context.read(appModelProvider).removeList(listId);
+                navigateHome();
+              }),
         ],
       ),
       body: Column(
@@ -118,8 +115,7 @@ class ListDetailContent extends HookWidget {
                 labelText: "Add a List Item",
                 labelStyle: TextStyle(color: Colors.black),
               ),
-              onSubmitted: (text) =>
-              {
+              onSubmitted: (text) => {
                 context
                     .read(appModelProvider)
                     .addListItem(listId, MomListItem(text)),
@@ -187,13 +183,19 @@ class ListItemTitle extends HookWidget {
         decoration: InputDecoration(
           labelText: listItem.title,
         ),
-        onSubmitted: (text) =>
-        {
+        onSubmitted: (text) => {
           context.read(appModelProvider).updateListItemTitle(listItem.id, text),
         },
       );
     } else {
-      return Text(listItem.title);
+      return Text(
+        listItem.title,
+        style: TextStyle(
+          decoration: listItem.isChecked
+              ? TextDecoration.lineThrough
+              : TextDecoration.none,
+        ),
+      );
     }
   }
 }
