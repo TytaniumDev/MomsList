@@ -1,4 +1,4 @@
-name: deploy
+name: Deploy to TestFlight
 on:
   push:
     branches: [main]
@@ -19,8 +19,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: "1.17.0"
-          channel: "stable"
+          channel: "beta"
       - name: Install tools
         run: |
           flutter pub get
