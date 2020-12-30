@@ -23,6 +23,7 @@ jobs:
       - name: Install tools
         run: |
           flutter pub get
+          flutter build ios
           cd ./ios && pod install
       - name: Setup SSH Keys and known_hosts for fastlane match
         run: |
