@@ -175,6 +175,7 @@ class MomListItems extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final listItems = useProvider(sortedListItemsProvider(listId));
+    final editModeEnabled = useProvider(editModeProvider).state;
 
     return ImplicitlyAnimatedList<MomListItem>(
       items: listItems,
@@ -198,7 +199,7 @@ class MomListItems extends HookWidget {
               context.read(appModelProvider).removeListItem(listItem.id);
             },
             resizeDuration: null,
-            direction: DismissDirection.endToStart,
+            direction: editModeEnabled ? DismissDirection.endToStart : DismissDirection.none,
             child: DecoratedBox(
               decoration: BoxDecoration(
                   border: Border(
