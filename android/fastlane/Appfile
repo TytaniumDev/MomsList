@@ -1,0 +1,2 @@
+json_key_file("/Users/tylerholland/Downloads/pc-api-8431207322984633063-755-44d4c93388ca.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.tytaniumdev.moms_list") # e.g. com.krausefx.app

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "891973327203",
+    "project_id": "moms-list-f9e7a",
+    "storage_bucket": "moms-list-f9e7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891973327203:android:539cb9c19c96109bdddb56",
+        "android_client_info": {
+          "package_name": "com.tytaniumdev.moms_list"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891973327203-5egvbuev3mfvsl2fhlmp0armjdku75rm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tytaniumdev.moms_list",
+            "certificate_hash": "114daf6d2fc6b415fc443be07b048d4104863f8d"
+          }
+        },
+        {
+          "client_id": "891973327203-kj23rrseeggh92vgvn27cn4f49ncqleh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgNpardum892Zs_pBCmkPeM1HZearWJeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891973327203-kj23rrseeggh92vgvn27cn4f49ncqleh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "891973327203-b30vsv1tc34fqg496v9c4vprp10lvnke.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tytaniumdev.momsList",
+                "app_store_id": "1546775588"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
