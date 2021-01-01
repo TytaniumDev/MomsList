@@ -1,9 +1,6 @@
 name: Deploy to Github Pages
 
-on: 
-  push:
-    tags: 
-      - '*'
+on: workflow_dispatch
 
 jobs:
   build:
