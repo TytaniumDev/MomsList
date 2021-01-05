@@ -65,7 +65,7 @@ class MomsListRouterDelegate extends RouterDelegate<MomsListRoutePath>
         if (show404)
           CupertinoPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
         else if (_selectedListId != null)
-          ListDetailPage(listId: _selectedListId!, navigateHome: _navigateHome)
+          ListDetailPage(_navigateHome)
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {

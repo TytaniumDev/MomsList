@@ -6,6 +6,8 @@ import 'package:moms_list/main.dart';
 import 'package:moms_list/repositories/app_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'list_detail_page.dart';
+
 class MomListViewModel with EquatableMixin {
   final String title;
   final String id;
@@ -57,7 +59,6 @@ class HomePageContent extends StatelessWidget {
           "Mom's List",
           style: TextStyle(color: Theme.of(context).textTheme.headline1?.color),
         ),
-        backgroundColor: Colors.yellow,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -83,18 +84,24 @@ class _HomePageLists extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final lists = useProvider(orderedMomListProvider);
+    final textController = useTextEditingController();
 
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
+            controller: textController,
             decoration: InputDecoration(
+              border: OutlineInputBorder(),
               labelText: "Add a List",
               labelStyle: TextStyle(color: Colors.black),
             ),
-            onSubmitted: (text) => {
-              context.read(appModelProvider).addList(MomList(text)),
+            keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.sentences,
+            onSubmitted: (text) {
+              context.read(appModelProvider).addList(MomList(text));
+              textController.text = "";
             },
           ),
         ),
@@ -103,10 +110,13 @@ class _HomePageLists extends HookWidget {
             children: [
               for (final list in lists)
                 ListTile(
-                  key: ValueKey(list.title),
+                  key: ValueKey(list.id),
                   title: Text(list.title),
                   trailing: Icon(Icons.reorder_rounded),
-                  onTap: () => onListTapped(list.id),
+                  onTap: () {
+                    context.read(listDetailPageIdProvider).state = list.id;
+                    onListTapped(list.id);
+                  },
                 )
             ],
             onReorder: (oldIndex, newIndex) =>

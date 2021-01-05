@@ -75,8 +75,6 @@ class MomList with EquatableMixin {
   final String id;
 
   /// The title of the list.
-  ///
-  /// This also serves as the unique identifier for this object.
   final String title;
 
   /// The current sort status of the list.
@@ -143,8 +141,6 @@ class MomListItem with EquatableMixin {
   final String id;
 
   /// The title of the item.
-  ///
-  /// This also serves as the unique identifier for this object.
   final String title;
 
   /// If this item is checked off or not.

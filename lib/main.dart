@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:moms_list/navigation.dart';
 import 'package:moms_list/repositories/app_model_repository.dart';
+import 'package:moms_list/theme.dart';
 
 void main() {
   runApp(ProviderScopedApp());
@@ -21,16 +22,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
+  //TODO: Should these be providers?
   MomsListRouterDelegate _routerDelegate = MomsListRouterDelegate();
-  MomsListRouteInformationParser _routeInformationParser = MomsListRouteInformationParser();
+  MomsListRouteInformationParser _routeInformationParser =
+      MomsListRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: "Mom's List",
-      theme: ThemeData(),
-      routerDelegate: _routerDelegate,
-      routeInformationParser: _routeInformationParser,
+    return Consumer(
+      builder: (context, watch, child) {
+        final theme = watch(themeProvider).state;
+
+        return MaterialApp.router(
+          title: "Mom's List",
+          theme: theme,
+          routerDelegate: _routerDelegate,
+          routeInformationParser: _routeInformationParser,
+        );
+      },
     );
   }
 }

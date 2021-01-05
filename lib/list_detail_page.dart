@@ -8,21 +8,23 @@ import 'package:moms_list/main.dart';
 import 'package:moms_list/repositories/app_model.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
-final listDetailProvider = Provider.family<MomList, String>((ref, listId) {
+final listDetailPageIdProvider = StateProvider<String>((ref) => "");
+
+final _listDetailProvider = Provider<MomList>((ref) {
+  final listId = ref.watch(listDetailPageIdProvider).state;
   final appModel = ref.watch(appModelProvider.state);
   return appModel.lists.firstWhere((element) => element.id == listId);
 });
 
-final listItemsProvider =
-    Provider.family<List<MomListItem>, String>((ref, listId) {
+final _listItemsProvider = Provider<List<MomListItem>>((ref) {
+  final listId = ref.watch(listDetailPageIdProvider).state;
   final appModel = ref.watch(appModelProvider.state);
   return appModel.lists.firstWhere((element) => element.id == listId).listItems;
 });
 
-final sortedListItemsProvider =
-    Provider.family<List<MomListItem>, String>((ref, listId) {
-  final listItems = ref.watch(listItemsProvider(listId));
-  final sortOrder = ref.watch(listDetailProvider(listId)).currentSort.sortType;
+final _sortedListItemsProvider = Provider<List<MomListItem>>((ref) {
+  final listItems = ref.watch(_listItemsProvider);
+  final sortOrder = ref.watch(_listDetailProvider).currentSort.sortType;
 
   // Make a new empty list if there aren't any items in the list currently.
   final unsortedListItems = listItems.isEmpty ? <MomListItem>[] : listItems;
@@ -44,23 +46,18 @@ final sortedListItemsProvider =
   }
 });
 
-final editModeProvider = StateProvider<bool>((_) => false);
+final _editModeProvider = StateProvider.autoDispose<bool>((_) => false);
 
 class ListDetailPage extends Page {
-  final String listId;
   final Function navigateHome;
 
-  ListDetailPage({
-    required this.listId,
-    required this.navigateHome,
-  }) : super(key: ValueKey(listId));
+  ListDetailPage(this.navigateHome);
 
   Route createRoute(BuildContext context) {
     return CupertinoPageRoute(
       settings: this,
       builder: (BuildContext context) {
         return ListDetailContent(
-          listId: listId,
           navigateHome: navigateHome,
         );
       },
@@ -69,21 +66,20 @@ class ListDetailPage extends Page {
 }
 
 class ListDetailContent extends HookWidget {
-  final String listId;
   final Function navigateHome;
 
-  const ListDetailContent(
-      {Key? key, required this.listId, required this.navigateHome})
+  const ListDetailContent({Key? key, required this.navigateHome})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final momList = useProvider(listDetailProvider(listId));
-    final editMode = useProvider(editModeProvider);
+    final listId = useProvider(listDetailPageIdProvider).state;
+    final momList = useProvider(_listDetailProvider);
+    final editMode = useProvider(_editModeProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(momList.title),
+        title: ListDetailPageTitle(),
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
@@ -109,6 +105,7 @@ class ListDetailContent extends HookWidget {
                   );
             },
           ),
+          //TODO: Make this an overflow menu
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
@@ -148,6 +145,7 @@ class ListDetailContent extends HookWidget {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(),
                   labelText: "Add a List Item",
                   labelStyle: TextStyle(color: Colors.black),
                 ),
@@ -167,6 +165,35 @@ class ListDetailContent extends HookWidget {
   }
 }
 
+class ListDetailPageTitle extends HookWidget {
+  const ListDetailPageTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final editModeEnabled = useProvider(_editModeProvider).state;
+    final momList = useProvider(_listDetailProvider);
+    final textController = useTextEditingController(text: momList.title);
+
+    if (editModeEnabled) {
+      return SizedBox(
+        height: 48,
+        child: Theme(
+          data: ThemeData(primaryColor: Colors.black),
+          child: TextField(
+            decoration: InputDecoration(border: OutlineInputBorder()),
+            controller: textController,
+            onSubmitted: (text) => {
+              context.read(appModelProvider).setListTitle(momList.id, text),
+            },
+          ),
+        ),
+      );
+    } else {
+      return Text(momList.title);
+    }
+  }
+}
+
 class MomListItems extends HookWidget {
   final String listId;
 
@@ -174,8 +201,8 @@ class MomListItems extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final listItems = useProvider(sortedListItemsProvider(listId));
-    final editModeEnabled = useProvider(editModeProvider).state;
+    final listItems = useProvider(_sortedListItemsProvider);
+    final editModeEnabled = useProvider(_editModeProvider).state;
 
     return ImplicitlyAnimatedList<MomListItem>(
       items: listItems,
@@ -199,7 +226,9 @@ class MomListItems extends HookWidget {
               context.read(appModelProvider).removeListItem(listItem.id);
             },
             resizeDuration: null,
-            direction: editModeEnabled ? DismissDirection.endToStart : DismissDirection.none,
+            direction: editModeEnabled
+                ? DismissDirection.endToStart
+                : DismissDirection.none,
             child: DecoratedBox(
               decoration: BoxDecoration(
                   border: Border(
@@ -207,7 +236,7 @@ class MomListItems extends HookWidget {
                     Divider.createBorderSide(context, color: Colors.black38),
               )),
               child: CheckboxListTile(
-                key: ValueKey(listItem.title),
+                key: ValueKey(listItem.id),
                 title: ProviderScope(
                   overrides: [listItemProvider.overrideWithValue(listItem)],
                   child: const ListItemTitle(),
@@ -235,17 +264,20 @@ class ListItemTitle extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final editModeEnabled = useProvider(editModeProvider).state;
+    final editModeEnabled = useProvider(_editModeProvider).state;
     final listItem = useProvider(listItemProvider);
+    final textController = useTextEditingController(text: listItem.title);
 
     if (editModeEnabled) {
-      return TextField(
-        decoration: InputDecoration(
-          labelText: listItem.title,
+      return SizedBox(
+        height: 38,
+        child: TextField(
+          decoration: InputDecoration(border: OutlineInputBorder()),
+          controller: textController,
+          onSubmitted: (text) => {
+            context.read(appModelProvider).updateListItemTitle(listItem.id, text),
+          },
         ),
-        onSubmitted: (text) => {
-          context.read(appModelProvider).updateListItemTitle(listItem.id, text),
-        },
       );
     } else {
       return Text(
