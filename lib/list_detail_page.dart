@@ -206,6 +206,7 @@ class MomListItems extends HookWidget {
 
     return ImplicitlyAnimatedList<MomListItem>(
       items: listItems,
+      padding: EdgeInsets.only(top: 20),
       areItemsTheSame: (a, b) => a == b,
       itemBuilder: (context, animation, listItem, index) {
         return SizeFadeTransition(
@@ -236,11 +237,13 @@ class MomListItems extends HookWidget {
                     Divider.createBorderSide(context, color: Colors.black38),
               )),
               child: CheckboxListTile(
+                controlAffinity: ListTileControlAffinity.leading,
                 key: ValueKey(listItem.id),
                 title: ProviderScope(
                   overrides: [listItemProvider.overrideWithValue(listItem)],
                   child: const ListItemTitle(),
                 ),
+
                 onChanged: (bool? value) {
                   if (value != null)
                     context

@@ -88,35 +88,44 @@ class _HomePageLists extends HookWidget {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: textController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Add a List",
-              labelStyle: TextStyle(color: Colors.black),
-            ),
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            onSubmitted: (text) {
-              context.read(appModelProvider).addList(MomList(text));
-              textController.text = "";
-            },
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: TextField(
+        //     controller: textController,
+        //     decoration: InputDecoration(
+        //       border: OutlineInputBorder(),
+        //       labelText: "Add a List",
+        //       labelStyle: TextStyle(color: Colors.black),
+        //     ),
+        //     keyboardType: TextInputType.text,
+        //     textCapitalization: TextCapitalization.sentences,
+        //     onSubmitted: (text) {
+        //       context.read(appModelProvider).addList(MomList(text));
+        //       textController.text = "";
+        //     },
+        //   ),
+        // ),
         Expanded(
           child: ReorderableListView(
+            padding: EdgeInsets.only(top: 20),
             children: [
               for (final list in lists)
-                ListTile(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   key: ValueKey(list.id),
-                  title: Text(list.title),
-                  trailing: Icon(Icons.reorder_rounded),
-                  onTap: () {
-                    context.read(listDetailPageIdProvider).state = list.id;
-                    onListTapped(list.id);
-                  },
+                  child: Card(
+                    child: ListTile(
+                      title: Text(
+                        list.title,
+                      ),
+                      leading: Icon(Icons.reorder_rounded),
+                      trailing: Icon(Icons.chevron_right_rounded),
+                      onTap: () {
+                        context.read(listDetailPageIdProvider).state = list.id;
+                        onListTapped(list.id);
+                      },
+                    ),
+                  ),
                 )
             ],
             onReorder: (oldIndex, newIndex) =>
