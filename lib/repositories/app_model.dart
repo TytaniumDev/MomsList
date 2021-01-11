@@ -217,7 +217,8 @@ class MomListSort {
 
   factory MomListSort.fromMap(Map<String, dynamic> map) {
     return MomListSort(
-      sortType: ListSort.values.firstWhere((element) => element.toString() == map['sortType']),
+      sortType: ListSort.values
+          .firstWhere((element) => element.toString() == map['sortType']),
       autoSortEnabled: map['autoSortEnabled'],
     );
   }
