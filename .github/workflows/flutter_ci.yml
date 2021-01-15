@@ -5,7 +5,7 @@ on:
   pull_request:
   schedule:
     # runs the CI everyday at 5AM
-    - cron:  '0 5 * * *'
+    # - cron:  '0 5 * * *'
 
 jobs:
   flutter_test:
