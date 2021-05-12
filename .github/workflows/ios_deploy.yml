@@ -14,7 +14,7 @@ jobs:
           channel: "beta"
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
-      - uses: actions/setup-ruby@v1
+      - uses: actions/setup-ruby@v1.1.3
         with:
           ruby-version: '>= 2.6'
       - name: Deploy iOS Beta to TestFlight via Fastlane
