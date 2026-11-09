@@ -1,11 +1,11 @@
 {
-    "name": "moms_list",
-    "short_name": "moms_list",
+    "name": "Mom's List",
+    "short_name": "Mom's List",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A Flutter-based Grocery List app for my Mom!",
+    "background_color": "#2E7D32",
+    "theme_color": "#2E7D32",
+    "description": "A bespoke grocery list app for Mom.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
