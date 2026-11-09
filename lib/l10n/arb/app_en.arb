@@ -1,0 +1,15 @@
+{
+    "@@locale": "en",
+    "appTitle": "Mom's List",
+    "@appTitle": {
+        "description": "Name of the app, shown in the task switcher and app bar"
+    },
+    "homeWelcome": "Welcome!",
+    "@homeWelcome": {
+        "description": "Heading on the home page"
+    },
+    "homeEmptyListsMessage": "Your grocery lists will show up here.",
+    "@homeEmptyListsMessage": {
+        "description": "Shown on the home page when there are no lists yet"
+    }
+}
