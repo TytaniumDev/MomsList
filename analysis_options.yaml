@@ -1,14 +1,35 @@
-include: package:lint/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
 
-# Not happy with the default? Customize the rules depending on your needs. 
-# Here are some examples:
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+
 linter:
   rules:
-    # Make constructors the first thing in every class
-    sort_constructors_first: true
+    # Consistency
+    always_use_package_imports: true
+    directives_ordering: true
+    prefer_single_quotes: true
+    use_super_parameters: true
 
-    # Good packages document everything
-    public_member_api_docs: true
+    # Clarity
+    always_declare_return_types: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
 
-    # Back to the 80s
-    lines_longer_than_80_chars: true
+    # Performance
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
+
+    # Correctness
+    avoid_void_async: true
+    cancel_subscriptions: true
+    close_sinks: true
+    unawaited_futures: true

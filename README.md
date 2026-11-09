@@ -1,16 +1,49 @@
-# moms_list
+# Mom's List
 
-A Flutter-based Grocery List app for my Mom!
+A bespoke grocery list app built for one very particular user: Mom.
 
-## Getting Started
+She uses an iPhone with the system text size turned up a lot, so every screen
+is designed and tested to work at the largest iOS Dynamic Type sizes.
 
-This project is a starting point for a Flutter application.
+## Getting started
 
-A few resources to get you started if this is your first Flutter project:
+Requires Flutter **3.47.9** (pinned in `pubspec.yaml`).
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```sh
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Checks
+
+These are the same checks CI runs on every pull request:
+
+```sh
+dart format --output=none --set-exit-if-changed .
+flutter analyze
+flutter test
+```
+
+## Project layout
+
+```
+lib/
+  main.dart            Entry point, nothing else
+  app.dart             Root MaterialApp and theme wiring
+  theme/               ThemeData builders
+  features/<feature>/  One folder per feature (screens, widgets, state)
+test/
+  helpers/             Shared test helpers (large-text pumping, a11y checks)
+```
+
+## Accessibility
+
+- Text scaling is never clamped; the app follows the system text size.
+- High-contrast themes are used automatically when "Increase Contrast" is on.
+- `test/helpers/pump_app.dart` renders widgets on an iPhone Pro sized screen
+  at text scales from default up to AX5 (about 3.1x). Use it in every screen
+  test along with `expectAccessibilityGuidelines()`.
+
+## License
+
+[MIT](LICENSE)
