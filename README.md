@@ -15,29 +15,10 @@ Built on the [Very Good Core][very_good_core_link] template from
 
 ## Getting Started 🚀
 
-This project contains 3 flavors:
-
-- development
-- staging
-- production
-
-To run the desired flavor either use the launch configuration in VSCode/Android Studio or use the following commands:
+There is a single production build, so run it with:
 
 ```sh
-# Development
-$ flutter run --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter run --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter run --flavor production --target lib/main_production.dart
-```
-
-On web, flavors are not supported, so pass only the target:
-
-```sh
-$ flutter run -d chrome --target lib/main_development.dart
+$ flutter run
 ```
 
 _\*Mom's List works on iOS, Android and Web._

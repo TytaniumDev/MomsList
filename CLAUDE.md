@@ -15,7 +15,7 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
 - `flutter analyze`
 - `very_good test --coverage --test-randomize-ordering-seed random`
   (CI requires 100% coverage)
-- Run: `flutter run --flavor development --target lib/main_development.dart`
+- Run: `flutter run` (single production build, no flavors)
 
 ## Conventions
 
@@ -32,6 +32,11 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
 - Every page gets a widget test that loops over `textScalesUnderTest`, pumps
   with `pumpApp(..., textScale: scale)` and calls
   `expectAccessibilityGuidelines()` (all from `test/helpers/helpers.dart`).
+- Every page's `AppBar` includes `FeedbackButton()` (from
+  `lib/feedback/`) in its `actions`, so Mom can always send feedback. It opens
+  Sentry's feedback form with a screenshot of the page attached.
+- No IDE folders (`.idea/`, `.vscode/`) and no build flavors: there is one
+  production build from `lib/main.dart`.
 - State management has not been chosen yet (likely Riverpod or plain
   `ChangeNotifier`). Ask before adding one.
 - PR titles follow Conventional Commits (`feat:`, `fix:`, `chore:` ...);

@@ -55,25 +55,6 @@ android {
         }
     }
 
-    flavorDimensions += "default"
-    productFlavors {
-        create("production") {
-            dimension = "default"
-            applicationIdSuffix = ""
-            manifestPlaceholders["appName"] = "Mom's List"
-        }
-        create("staging") {
-            dimension = "default"
-            applicationIdSuffix = ".stg"
-            manifestPlaceholders["appName"] = "[STG] Mom's List"
-        }
-        create("development") {
-            dimension = "default"
-            applicationIdSuffix = ".dev"
-            manifestPlaceholders["appName"] = "[DEV] Mom's List"
-        }
-    }
-
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
