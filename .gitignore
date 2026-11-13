@@ -14,13 +14,13 @@ migrate_working_dir/
 *.iml
 *.ipr
 *.iws
-.idea/*
+.idea/
 
 # Visual Studio Code related
 .classpath
 .project
 .settings/
-.vscode/*
+.vscode/
 
 # packages file containing multi-root paths
 .packages.generated
@@ -104,11 +104,6 @@ app.*.map.json
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
-!.vscode/extensions.json
-!.vscode/launch.json
-!.idea/codeStyles/
-!.idea/dictionaries/
-!.idea/runConfigurations/
 
 # Generated l10n files
 lib/l10n/gen/

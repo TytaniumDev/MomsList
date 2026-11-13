@@ -11,5 +11,45 @@
     "homeEmptyListsMessage": "Your grocery lists will show up here.",
     "@homeEmptyListsMessage": {
         "description": "Shown on the home page when there are no lists yet"
+    },
+    "feedbackButtonTooltip": "Send feedback",
+    "@feedbackButtonTooltip": {
+        "description": "App bar button that opens the feedback form"
+    },
+    "feedbackFormTitle": "Feedback",
+    "@feedbackFormTitle": {
+        "description": "Title of the feedback form. Keep it short so it is not cut off at the largest text size"
+    },
+    "feedbackMessageLabel": "Message",
+    "@feedbackMessageLabel": {
+        "description": "Label above the feedback message box. Keep it short so it fits on one line at the largest text size"
+    },
+    "feedbackMessagePlaceholder": "What's wrong, or what would you like changed?",
+    "@feedbackMessagePlaceholder": {
+        "description": "Hint shown in the empty feedback message box"
+    },
+    "feedbackValidationError": "Please type a message first.",
+    "@feedbackValidationError": {
+        "description": "Shown when the feedback form is sent without a message"
+    },
+    "feedbackSubmitButtonLabel": "Send",
+    "@feedbackSubmitButtonLabel": {
+        "description": "Button that sends the feedback"
+    },
+    "feedbackCancelButtonLabel": "Cancel",
+    "@feedbackCancelButtonLabel": {
+        "description": "Button that closes the feedback form without sending"
+    },
+    "feedbackSuccessMessage": "Thank you! Your feedback was sent.",
+    "@feedbackSuccessMessage": {
+        "description": "Shown after feedback is sent"
+    },
+    "feedbackSubmitErrorMessage": "Your feedback couldn't be sent. Please try again.",
+    "@feedbackSubmitErrorMessage": {
+        "description": "Shown when sending feedback fails"
+    },
+    "feedbackRemoveScreenshotButtonLabel": "Remove screenshot",
+    "@feedbackRemoveScreenshotButtonLabel": {
+        "description": "Button that removes the screenshot attached to the feedback"
     }
 }
