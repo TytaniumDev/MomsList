@@ -25,6 +25,30 @@ _\*Mom's List works on iOS, Android and Web._
 
 ---
 
+## Releasing to TestFlight 🚀
+
+The iOS app (`com.tytaniumdev.momsList`) is signed automatically by Xcode
+with the team set in `ios/Runner.xcodeproj`, so a Mac signed in to that
+Apple Developer account is all that's needed.
+
+1. Bump the build number in `pubspec.yaml` (the number after `+`). Every
+   upload needs a new one.
+2. Build the archive:
+
+   ```sh
+   $ flutter build ipa
+   ```
+
+3. Upload `build/ios/ipa/*.ipa` with Apple's Transporter app, or open
+   `build/ios/archive/Runner.xcarchive` in Xcode and choose
+   **Distribute App → TestFlight & App Store**.
+4. Once App Store Connect finishes processing the build, it is available to
+   the TestFlight testers.
+
+TestFlight builds expire after 90 days, so upload a new one before then.
+
+---
+
 ## Running Tests 🧪
 
 To run all unit and widget tests use the following command:
