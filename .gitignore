@@ -107,3 +107,8 @@ app.*.map.json
 
 # Generated l10n files
 lib/l10n/gen/
+
+# fastlane run output
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/test_output/
