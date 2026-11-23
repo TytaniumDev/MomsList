@@ -1,0 +1,96 @@
+# iOS release lanes, mirrored from Sousvite. Run from ios/:
+#
+#   BUNDLE_GEMFILE=../Gemfile bundle exec fastlane <lane>
+#
+# `.github/workflows/release.yaml` runs `beta` after `flutter build ios
+# --config-only` has written the version and build number.
+#
+# Environment:
+#   APP_STORE_CONNECT_KEY_ID, APP_STORE_CONNECT_ISSUER_ID,
+#   APP_STORE_CONNECT_API_KEY   the App Store Connect API key (.p8 contents)
+#   MATCH_PASSWORD              decrypts the certificates repo
+# plus SSH access to the certificates repo (a deploy key in CI).
+
+default_platform(:ios)
+
+APP_IDENTIFIER = "com.tytaniumdev.momsList"
+PROFILE_NAME = "match AppStore #{APP_IDENTIFIER}"
+TEAM_ID = "F2HXQGU2CC"
+# The TestFlight group every build goes to.
+TESTER_GROUP = "Internal"
+
+# The API key every Apple-facing action below accepts.
+def asc_api_key
+  app_store_connect_api_key(
+    key_id: ENV.fetch("APP_STORE_CONNECT_KEY_ID"),
+    issuer_id: ENV.fetch("APP_STORE_CONNECT_ISSUER_ID"),
+    key_content: ENV.fetch("APP_STORE_CONNECT_API_KEY")
+  )
+end
+
+platform :ios do
+  desc "Register the bundle id if needed, then create the App Store profile"
+  desc "in the certificates repo (needs write access to it). Safe to run"
+  desc "again: it changes nothing once the profile exists. Set"
+  desc "MATCH_FORCE=true to make the profile again."
+  lane :certs do
+    setup_ci
+    api_key = asc_api_key
+    # match needs the bundle id registered before it can make a profile.
+    unless Spaceship::ConnectAPI::BundleId.find(APP_IDENTIFIER)
+      Spaceship::ConnectAPI::BundleId.create(
+        name: "Mom's List",
+        platform: "IOS",
+        identifier: APP_IDENTIFIER
+      )
+    end
+    match(api_key: api_key, readonly: false, force: ENV["MATCH_FORCE"] == "true")
+  end
+
+  desc "Build a signed release and upload it to TestFlight"
+  lane :beta do
+    # A temporary keychain on CI, so match can install the certificate.
+    setup_ci
+    api_key = asc_api_key
+    match(api_key: api_key, readonly: true)
+
+    # The Xcode project uses automatic signing for local runs. Release builds
+    # sign manually with match's profile, so xcodebuild never asks for Apple's
+    # cloud-managed certificate (that needs an Admin API key).
+    update_code_signing_settings(
+      path: "Runner.xcodeproj",
+      targets: ["Runner"],
+      use_automatic_signing: false,
+      team_id: TEAM_ID,
+      code_sign_identity: "Apple Distribution",
+      profile_name: PROFILE_NAME,
+      bundle_identifier: APP_IDENTIFIER
+    )
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: { APP_IDENTIFIER => PROFILE_NAME }
+      },
+      archive_path: "../build/ios/MomsList.xcarchive",
+      output_directory: "../build/ios/ipa",
+      output_name: "MomsList.ipa"
+    )
+
+    # Adding the build to the Internal group waits for Apple to process it
+    # (10 to 20 minutes).
+    #
+    # submit_beta_review: false because fastlane otherwise submits every
+    # build given `groups` for Beta App Review, which only external testing
+    # needs. Internal groups need no review.
+    upload_to_testflight(
+      api_key: api_key,
+      groups: [TESTER_GROUP],
+      distribute_external: false,
+      submit_beta_review: false
+    )
+  end
+end

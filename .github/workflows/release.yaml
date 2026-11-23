@@ -1,0 +1,139 @@
+name: Release
+
+# Signed iOS builds for TestFlight, mirrored from Sousvite's release workflow.
+#
+# - Every push to main, or "Run workflow" on the Actions tab, builds and
+#   uploads to TestFlight's Internal group.
+# - A pull request that touches the release setup builds without signing or
+#   uploading, so a broken build shows up before it merges.
+#
+# Fastlane lanes: ios/fastlane. Secrets are listed in the README.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/release.yaml
+      - Gemfile
+      - Gemfile.lock
+      # Plugin versions decide the native dependencies (Swift packages).
+      - pubspec.yaml
+      - pubspec.lock
+      - ios/**
+
+permissions:
+  contents: read
+
+# Pushes to main queue behind a running release instead of cancelling it,
+# so an upload is never cut off halfway.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Only ever goes up, which TestFlight requires.
+  BUILD_NUMBER: ${{ github.run_number }}
+  IS_RELEASE: ${{ github.event_name != 'pull_request' }}
+
+jobs:
+  ios:
+    name: iOS
+    # Apple emails a warning for every upload built with an SDK older than
+    # the one it will soon require (iOS 27 from April 2027). The macos-26
+    # image tops out at Xcode 26, so iOS builds run on GitHub's Xcode image.
+    # Move to the next one (xcode-28) when Apple ships the next major Xcode.
+    runs-on: xcode-27
+    timeout-minutes: 45
+    env:
+      APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile
+      FASTLANE_SKIP_UPDATE_CHECK: "1"
+      FASTLANE_HIDE_CHANGELOG: "1"
+      # `xcodebuild -showBuildSettings` resolves the Swift packages first,
+      # which can take minutes on a fresh runner; fastlane's default of 3s
+      # with 4 retries gives up too early.
+      FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "120"
+      FASTLANE_XCODEBUILD_SETTINGS_RETRIES: "3"
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v7
+
+      # The image's default Xcode lags its newest one. latest-stable skips
+      # betas and release candidates, which App Store Connect rejects.
+      - name: 🔨 Select the newest Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          # Keep in step with flutter_version in main.yaml.
+          flutter-version: 3.47.x
+          channel: stable
+          cache: true
+
+      - name: 📦 Install Dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: 🧪 Build without signing
+        if: env.IS_RELEASE != 'true'
+        run: flutter build ios --release --no-codesign --build-number="$BUILD_NUMBER"
+
+      - name: 🔑 Check release secrets
+        if: env.IS_RELEASE == 'true'
+        env:
+          MATCH_SSH_PRIVATE_KEY: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+        run: |
+          missing=()
+          for name in APP_STORE_CONNECT_KEY_ID APP_STORE_CONNECT_ISSUER_ID APP_STORE_CONNECT_API_KEY MATCH_PASSWORD MATCH_SSH_PRIVATE_KEY; do
+            [ -n "${!name}" ] || missing+=("$name")
+          done
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing secrets: ${missing[*]}. See the README's Releasing section."
+            exit 1
+          fi
+
+      - name: 💎 Setup Ruby
+        if: env.IS_RELEASE == 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: 🔐 Certificates repo access
+        if: env.IS_RELEASE == 'true'
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+
+      - name: ⚙️ Write build settings
+        if: env.IS_RELEASE == 'true'
+        # --no-codesign: Flutter only writes settings here, and fastlane signs
+        # later. Without it Flutter looks for a local signing certificate.
+        run: >-
+          flutter build ios --config-only --release --no-codesign
+          --build-number="$BUILD_NUMBER"
+
+      - name: 🚀 Build and upload to TestFlight
+        if: env.IS_RELEASE == 'true'
+        working-directory: ios
+        run: bundle exec fastlane beta
+
+      - name: 🐛 Upload debug symbols to Sentry
+        if: env.IS_RELEASE == 'true' && env.SENTRY_AUTH_TOKEN != ''
+        run: >-
+          npx --yes @sentry/cli@2 debug-files upload
+          --org tytaniumdev --project moms-list
+          build/ios/MomsList.xcarchive/dSYMs
+
+      - name: ⚠️ Sentry token missing
+        if: env.IS_RELEASE == 'true' && env.SENTRY_AUTH_TOKEN == ''
+        run: echo "::warning::SENTRY_AUTH_TOKEN is not set, so iOS debug symbols were not uploaded."
