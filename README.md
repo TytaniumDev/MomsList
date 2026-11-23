@@ -27,25 +27,54 @@ _\*Mom's List works on iOS, Android and Web._
 
 ## Releasing to TestFlight 🚀
 
-The iOS app (`com.tytaniumdev.momsList`) is signed automatically by Xcode
-with the team set in `ios/Runner.xcodeproj`, so a Mac signed in to that
-Apple Developer account is all that's needed.
+Every push to `main` builds a signed iOS release and uploads it to
+TestFlight's **Internal** group (`.github/workflows/release.yaml`, lanes in
+`ios/fastlane/`). The build number is the workflow's run number, so it
+always goes up. You can also start a release from the Actions tab with
+**Run workflow**. Pull requests that touch the release setup build without
+signing, so a broken build shows up before it merges.
 
-1. Bump the build number in `pubspec.yaml` (the number after `+`). Every
-   upload needs a new one.
-2. Build the archive:
+Signing uses fastlane `match` with the shared `TytaniumDev-certificates`
+repo, like Sousvite. Locally, Xcode signs automatically with the team set
+in `ios/Runner.xcodeproj`.
+
+### One-time setup
+
+1. In App Store Connect, create the app with bundle ID
+   `com.tytaniumdev.momsList`, then create a TestFlight internal group named
+   `Internal` and add the testers to it.
+2. Set the repository secrets from your Mac:
 
    ```sh
-   $ flutter build ipa
+   $ tools/secrets/set_github_secrets.sh
    ```
 
-3. Upload `build/ios/ipa/*.ipa` with Apple's Transporter app, or open
-   `build/ios/archive/Runner.xcarchive` in Xcode and choose
-   **Distribute App → TestFlight & App Store**.
-4. Once App Store Connect finishes processing the build, it is available to
-   the TestFlight testers.
+   | Secret | From |
+   |---|---|
+   | `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_API_KEY` | The team's App Store Connect API key (`AuthKey_<key id>.p8`) |
+   | `MATCH_PASSWORD`, `MATCH_SSH_PRIVATE_KEY` | The match password and the certificates repo's deploy key, from Doppler |
+   | `SENTRY_AUTH_TOKEN` | A Sentry org auth token (optional, uploads debug symbols) |
 
-TestFlight builds expire after 90 days, so upload a new one before then.
+3. Create the App Store profile once, on a computer that can push to the
+   certificates repo:
+
+   ```sh
+   $ cd ios
+   $ BUNDLE_GEMFILE=../Gemfile bundle install
+   $ BUNDLE_GEMFILE=../Gemfile bundle exec fastlane certs
+   ```
+
+   It reads the same `APP_STORE_CONNECT_*` and `MATCH_PASSWORD` values from
+   the environment.
+
+### Manual upload
+
+To upload from a Mac instead, bump the build number in `pubspec.yaml` past
+the last one on TestFlight, run `flutter build ipa`, and upload
+`build/ios/ipa/*.ipa` with Apple's Transporter app.
+
+TestFlight builds expire after 90 days, so make sure something merges at
+least that often.
 
 ---
 

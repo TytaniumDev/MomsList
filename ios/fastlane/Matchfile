@@ -1,0 +1,8 @@
+# Signing certificates and profiles live, encrypted with MATCH_PASSWORD, in
+# the private certificates repo that Tyler's other apps share. One Apple
+# Distribution certificate covers every app on the team.
+git_url("git@github.com:TytaniumDev/TytaniumDev-certificates.git")
+storage_mode("git")
+type("appstore")
+app_identifier(["com.tytaniumdev.momsList"])
+team_id("F2HXQGU2CC")
