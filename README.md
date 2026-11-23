@@ -42,7 +42,8 @@ in `ios/Runner.xcodeproj`.
 
 1. In App Store Connect, create the app with bundle ID
    `com.tytaniumdev.momsList`, then create a TestFlight internal group named
-   `Internal` and add the testers to it.
+   `Internal` with automatic distribution turned on, and add the testers to
+   it. Every uploaded build then goes to them once Apple has processed it.
 2. Set the repository secrets from your Mac:
 
    ```sh
