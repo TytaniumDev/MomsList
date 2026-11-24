@@ -1,7 +1,9 @@
 {
   "fill-specializations" : [
     {
-      "value" : "automatic"
+      "value" : {
+        "automatic-gradient" : "extended-srgb:0.18039,0.49020,0.19608,1.00000"
+      }
     },
     {
       "appearance" : "dark",
@@ -10,28 +12,13 @@
   ],
   "groups" : [
     {
-      "blur-material" : 0.5,
       "layers" : [
         {
-          "fill-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : {
-                "solid" : "extended-gray:1.00000,1.00000"
-              }
-            },
-            {
-              "appearance" : "tinted",
-              "value" : {
-                "solid" : "extended-gray:1.00000,1.00000"
-              }
-            }
-          ],
           "glass" : false,
-          "image-name" : "Logo.svg",
-          "name" : "Logo",
+          "image-name" : "Notepad.svg",
+          "name" : "Notepad",
           "position" : {
-            "scale" : 1.8,
+            "scale" : 1.1,
             "translation-in-points" : [
               0,
               0
@@ -44,11 +31,7 @@
         "kind" : "neutral",
         "opacity" : 0.5
       },
-      "specular" : true,
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
+      "specular" : true
     }
   ],
   "supported-platforms" : {
