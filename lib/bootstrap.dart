@@ -13,10 +13,8 @@ const _sentryDsn =
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await SentryFlutter.init(
     (options) {
-      options
-        ..dsn = _sentryDsn
-        // Lets errors and feedback include a screenshot of the page.
-        ..attachScreenshot = true;
+      options.dsn = _sentryDsn;
+      configureFeedbackCapture(options);
       // The app is English only, so the form can be localized before the
       // widget tree (and its BuildContext) exists.
       configureFeedbackForm(
