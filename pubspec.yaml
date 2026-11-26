@@ -22,7 +22,7 @@ dependencies:
   intl: ^0.20.2
   material_ui: ^1.11.0
   riverpod_annotation: ^4.0.8
-  sentry_flutter: ^10.3.0
+  sentry_flutter: ^10.6.0
   uuid: ^4.6.0
 
 dev_dependencies:
