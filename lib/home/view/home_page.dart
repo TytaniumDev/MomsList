@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/auth/auth.dart';
 import 'package:moms_list/feedback/feedback.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
@@ -14,7 +15,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.appTitle),
-        actions: const [FeedbackButton()],
+        actions: const [SignOutButton(), FeedbackButton()],
       ),
       body: SafeArea(
         child: ListView(

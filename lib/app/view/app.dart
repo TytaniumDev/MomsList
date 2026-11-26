@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:moms_list/app/theme/app_theme.dart';
-import 'package:moms_list/home/home.dart';
+import 'package:moms_list/auth/auth.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
 /// Text scaling is intentionally left unclamped so the app always honours
@@ -19,7 +19,7 @@ class App extends StatelessWidget {
       highContrastDarkTheme: AppTheme.dark(highContrast: true),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const HomePage(),
+      home: const AuthGate(),
     );
   }
 }

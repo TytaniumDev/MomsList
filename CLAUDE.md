@@ -37,7 +37,12 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   Sentry's feedback form with a screenshot of the page attached.
 - No IDE folders (`.idea/`, `.vscode/`) and no build flavors: there is one
   production build from `lib/main.dart`.
-- State management has not been chosen yet (likely Riverpod or plain
-  `ChangeNotifier`). Ask before adding one.
+- State management is Riverpod (`flutter_riverpod`, plain providers, no code
+  generation). A feature's providers live in `lib/<feature>/state/`, its
+  repositories in `lib/<feature>/data/`. Tests override providers through
+  `pumpApp(..., overrides: [...])`.
+- Sign-in and sync use Firebase (Auth now, Firestore next), mirroring
+  Sousvite. `lib/firebase_options.dart` returns null until the Firebase
+  project exists; without it the app skips sign-in and runs as before.
 - PR titles follow Conventional Commits (`feat:`, `fix:`, `chore:` ...);
   CI checks this.

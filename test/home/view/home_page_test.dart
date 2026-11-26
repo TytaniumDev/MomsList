@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:moms_list/auth/auth.dart';
 import 'package:moms_list/feedback/feedback.dart';
 import 'package:moms_list/home/home.dart';
 
@@ -19,6 +21,18 @@ void main() {
       await tester.pumpApp(const HomePage());
 
       expect(find.byType(FeedbackButton), findsOneWidget);
+    });
+
+    testWidgets('shows the sign-out button when signed in', (tester) async {
+      final repository = MockAuthRepository();
+      when(repository.watchUser).thenAnswer((_) => Stream.value(testUser));
+
+      await tester.pumpApp(
+        const HomePage(),
+        overrides: [authRepositoryProvider.overrideWithValue(repository)],
+      );
+
+      expect(find.byTooltip('Sign out'), findsOneWidget);
     });
 
     for (final MapEntry(key: name, value: scale)

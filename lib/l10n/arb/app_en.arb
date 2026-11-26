@@ -51,5 +51,53 @@
     "feedbackRemoveScreenshotButtonLabel": "Remove screenshot",
     "@feedbackRemoveScreenshotButtonLabel": {
         "description": "Button that removes the screenshot attached to the feedback"
+    },
+    "loadingLabel": "Loading",
+    "@loadingLabel": {
+        "description": "Read by screen readers for the spinner shown while the app starts"
+    },
+    "signInTitle": "Welcome!",
+    "@signInTitle": {
+        "description": "Heading on the sign-in page"
+    },
+    "signInMessage": "Sign in so your list is the same on your phone and your computer.",
+    "@signInMessage": {
+        "description": "Explains why Mom should sign in"
+    },
+    "signInWithAppleButton": "Sign in with Apple",
+    "@signInWithAppleButton": {
+        "description": "Button that signs in with an Apple account"
+    },
+    "signInWithGoogleButton": "Sign in with Google",
+    "@signInWithGoogleButton": {
+        "description": "Button that signs in with a Google account"
+    },
+    "signInSameAccountHint": "Use the same button on every device, so you always see the same list.",
+    "@signInSameAccountHint": {
+        "description": "Hint under the sign-in buttons. Signing in with Apple on one device and Google on another makes two separate lists"
+    },
+    "signInErrorMessage": "Signing in didn't work. Please check your internet connection and try again.",
+    "@signInErrorMessage": {
+        "description": "Shown when signing in fails"
+    },
+    "signOutButtonTooltip": "Sign out",
+    "@signOutButtonTooltip": {
+        "description": "App bar button that signs out"
+    },
+    "signOutDialogTitle": "Sign out?",
+    "@signOutDialogTitle": {
+        "description": "Title of the dialog that confirms signing out"
+    },
+    "signOutDialogMessage": "Your list stays saved. You can sign back in any time.",
+    "@signOutDialogMessage": {
+        "description": "Body of the dialog that confirms signing out"
+    },
+    "signOutDialogCancelButton": "Cancel",
+    "@signOutDialogCancelButton": {
+        "description": "Closes the sign-out dialog without signing out"
+    },
+    "signOutDialogConfirmButton": "Sign out",
+    "@signOutDialogConfirmButton": {
+        "description": "Confirms signing out"
     }
 }
