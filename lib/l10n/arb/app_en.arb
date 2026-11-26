@@ -4,14 +4,6 @@
     "@appTitle": {
         "description": "Name of the app, shown in the task switcher and app bar"
     },
-    "homeWelcome": "Welcome!",
-    "@homeWelcome": {
-        "description": "Heading on the home page"
-    },
-    "homeEmptyListsMessage": "Your grocery lists will show up here.",
-    "@homeEmptyListsMessage": {
-        "description": "Shown on the home page when there are no lists yet"
-    },
     "feedbackButtonTooltip": "Send feedback",
     "@feedbackButtonTooltip": {
         "description": "App bar button that opens the feedback form"
@@ -91,5 +83,97 @@
     "signOutDialogConfirmButton": "Sign out",
     "@signOutDialogConfirmButton": {
         "description": "Confirms signing out"
+    },
+    "addItemHint": "Add item",
+    "@addItemHint": {
+        "description": "Hint in the box at the top of a store list for typing a new item. Keep it short"
+    },
+    "addItemButtonTooltip": "Add",
+    "@addItemButtonTooltip": {
+        "description": "Button beside the add-item box"
+    },
+    "groceryListEmptyMessage": "Nothing to get. Type an item above.",
+    "@groceryListEmptyMessage": {
+        "description": "Shown at the top of a store list when every item is checked off"
+    },
+    "gotItHeading": "Got it ({count})",
+    "@gotItHeading": {
+        "description": "Heading above the checked-off items on a store list",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "suggestionOnThisList": "already on list",
+    "@suggestionOnThisList": {
+        "description": "After a suggested item that is already unchecked on this list"
+    },
+    "suggestionBoughtBefore": "bought before",
+    "@suggestionBoughtBefore": {
+        "description": "After a suggested item that was checked off on this list before"
+    },
+    "suggestionFromStore": "from {store}",
+    "@suggestionFromStore": {
+        "description": "After a suggested item that was entered at another store",
+        "placeholders": {
+            "store": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteItemDialogTitle": "Delete {item}?",
+    "@deleteItemDialogTitle": {
+        "description": "Title of the dialog shown when holding down an item",
+        "placeholders": {
+            "item": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteItemDialogMessage": "It will be taken off this list and won't be suggested here again.",
+    "@deleteItemDialogMessage": {
+        "description": "Body of the delete item dialog"
+    },
+    "deleteItemDialogCancelButton": "Cancel",
+    "@deleteItemDialogCancelButton": {
+        "description": "Keeps the item"
+    },
+    "deleteItemDialogConfirmButton": "Delete",
+    "@deleteItemDialogConfirmButton": {
+        "description": "Deletes the item"
+    },
+    "switchStoreHint": "Switch store",
+    "@switchStoreHint": {
+        "description": "Screen reader hint on the store name in the app bar, which opens the store list"
+    },
+    "storePickerTitle": "Stores",
+    "@storePickerTitle": {
+        "description": "Title of the page listing every store"
+    },
+    "storeItemsToGet": "{count, plural, =0{Nothing to get} =1{1 to get} other{{count} to get}}",
+    "@storeItemsToGet": {
+        "description": "How many unchecked items a store has, under its name in the store list",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "newStoreHint": "New store",
+    "@newStoreHint": {
+        "description": "Hint in the box for adding a store, such as Costco"
+    },
+    "addStoreButton": "Add",
+    "@addStoreButton": {
+        "description": "Button that adds the typed store"
+    },
+    "noStoresMessage": "Add a store to start a list, like Costco or Albertsons.",
+    "@noStoresMessage": {
+        "description": "Shown before any stores exist"
+    },
+    "groceryLoadErrorMessage": "Your lists couldn't be loaded. Please check your internet connection.",
+    "@groceryLoadErrorMessage": {
+        "description": "Shown when stores cannot be loaded"
     }
 }

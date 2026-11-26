@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/app/theme/notepad_colors.dart';
 
 /// Builds the app's [ThemeData] variants from a single seed colour.
 ///
@@ -14,12 +15,23 @@ abstract final class AppTheme {
       _build(Brightness.dark, highContrast: highContrast);
 
   static ThemeData _build(Brightness brightness, {required bool highContrast}) {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: _seedColor,
+      brightness: brightness,
+      contrastLevel: highContrast ? 1 : 0,
+    );
+    final notepad = brightness == Brightness.light
+        ? NotepadColors.light
+        : NotepadColors.dark;
     return ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: _seedColor,
-        brightness: brightness,
-        contrastLevel: highContrast ? 1 : 0,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: notepad.paper,
+      // A solid green header, like the cover of Mom's notepad.
+      appBarTheme: AppBarTheme(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
       ),
+      extensions: [notepad],
       // Keep every tappable control at least 48x48, even on web.
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.standard,
