@@ -13,6 +13,7 @@ void main() {
 
       final container = ProviderContainer.test();
       expect(container.read(firebaseAppProvider), isNull);
+      expect(container.read(firestoreProvider), isNull);
     });
 
     test('with config, Firebase starts', () async {
@@ -28,6 +29,12 @@ void main() {
       final app = await initFirebase(options);
 
       expect(app?.options, options);
+
+      final container = ProviderContainer.test(
+        overrides: [firebaseAppProvider.overrideWithValue(app)],
+      );
+      final firestore = container.read(firestoreProvider);
+      expect(firestore?.settings.persistenceEnabled, isTrue);
     });
   });
 }

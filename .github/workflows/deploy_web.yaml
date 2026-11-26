@@ -1,9 +1,10 @@
 name: Deploy web app
 
 # Builds the Flutter web app and deploys it to Firebase Hosting on the
-# `moms-list-app` project: https://moms-list-app.web.app
-# Mirrored from Sousvite's deploy_web.yaml. Runs on every push to main,
-# after CI has already checked the change.
+# `moms-list-app` project (https://moms-list-app.web.app), along with the
+# Firestore security rules. Mirrored from Sousvite's deploy_web.yaml and
+# deploy_functions.yaml. Runs on every push to main, after CI has already
+# checked the change.
 on:
   push:
     branches: [main]
@@ -50,6 +51,21 @@ jobs:
       - name: ⚠️ Deploy credential missing
         if: env.FIREBASE_SERVICE_ACCOUNT == ''
         run: echo "::warning::FIREBASE_SERVICE_ACCOUNT is not set, so the web app was built but not deployed. See the README's Web app section."
+
+      - name: 🔑 Write credentials
+        if: env.FIREBASE_SERVICE_ACCOUNT != ''
+        run: |
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-deploy.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/firebase-deploy.json" >> "$GITHUB_ENV"
+
+      # Before the app, so a new app never meets old rules.
+      - name: 🔒 Deploy Firestore rules
+        if: env.FIREBASE_SERVICE_ACCOUNT != ''
+        run: >-
+          npx --yes firebase-tools@15 deploy
+          --only firestore:rules
+          --project moms-list-app
+          --non-interactive
 
       - name: 🚀 Deploy to Firebase Hosting
         if: env.FIREBASE_SERVICE_ACCOUNT != ''

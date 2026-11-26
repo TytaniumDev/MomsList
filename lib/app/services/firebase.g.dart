@@ -59,3 +59,67 @@ final class FirebaseAppProvider
 }
 
 String _$firebaseAppHash() => r'222f6f54d2be01bff3d3f18c15d0d222c788ff33';
+
+/// Cloud Firestore for [firebaseAppProvider], or null without Firebase.
+///
+/// Turns on the local cache everywhere (it is off by default on web), so
+/// Mom's list opens and changes offline and syncs when she is back online.
+/// Settings can only be set once, so this is kept alive.
+
+@ProviderFor(firestore)
+final firestoreProvider = FirestoreProvider._();
+
+/// Cloud Firestore for [firebaseAppProvider], or null without Firebase.
+///
+/// Turns on the local cache everywhere (it is off by default on web), so
+/// Mom's list opens and changes offline and syncs when she is back online.
+/// Settings can only be set once, so this is kept alive.
+
+final class FirestoreProvider
+    extends
+        $FunctionalProvider<
+          FirebaseFirestore?,
+          FirebaseFirestore?,
+          FirebaseFirestore?
+        >
+    with $Provider<FirebaseFirestore?> {
+  /// Cloud Firestore for [firebaseAppProvider], or null without Firebase.
+  ///
+  /// Turns on the local cache everywhere (it is off by default on web), so
+  /// Mom's list opens and changes offline and syncs when she is back online.
+  /// Settings can only be set once, so this is kept alive.
+  FirestoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'firestoreProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$firestoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<FirebaseFirestore?> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  FirebaseFirestore? create(Ref ref) {
+    return firestore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(FirebaseFirestore? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<FirebaseFirestore?>(value),
+    );
+  }
+}
+
+String _$firestoreHash() => r'4db8f877d45f3d5de528182976075ddccd7c782f';
