@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:moms_list/feedback/feedback.dart';
+import 'package:moms_list/features/feedback/feedback.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moms_list/app/app.dart';
-import 'package:moms_list/home/home.dart';
+import 'package:moms_list/features/home/home.dart';
 
 import '../../helpers/helpers.dart';
 

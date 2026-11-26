@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:moms_list/feedback/feedback.dart';
-import 'package:moms_list/home/home.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:moms_list/app/services/auth_service.dart';
+import 'package:moms_list/features/feedback/feedback.dart';
+import 'package:moms_list/features/home/home.dart';
 
-import '../../helpers/helpers.dart';
+import '../../../helpers/helpers.dart';
 
 void main() {
   group(HomePage, () {
@@ -19,6 +21,18 @@ void main() {
       await tester.pumpApp(const HomePage());
 
       expect(find.byType(FeedbackButton), findsOneWidget);
+    });
+
+    testWidgets('shows the sign-out button when signed in', (tester) async {
+      final auth = MockAuthService();
+      when(auth.watchUser).thenAnswer((_) => Stream.value(testUser));
+
+      await tester.pumpApp(
+        const HomePage(),
+        overrides: [authServiceProvider.overrideWithValue(auth)],
+      );
+
+      expect(find.byTooltip('Sign out'), findsOneWidget);
     });
 
     for (final MapEntry(key: name, value: scale)

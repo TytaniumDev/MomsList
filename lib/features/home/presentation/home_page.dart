@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/feedback/feedback.dart';
+import 'package:moms_list/features/account/account.dart';
+import 'package:moms_list/features/feedback/feedback.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
 /// Placeholder landing page until the first real feature lands.
@@ -14,7 +15,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.appTitle),
-        actions: const [FeedbackButton()],
+        actions: const [SignOutButton(), FeedbackButton()],
       ),
       body: SafeArea(
         child: ListView(

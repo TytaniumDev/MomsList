@@ -74,5 +74,17 @@
 			</array>
 		</dict>
 	</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- Google sign-in returns here: the iOS OAuth client's REVERSED_CLIENT_ID. -->
+				<string>com.googleusercontent.apps.703730322104-lpnbshq13mp40v7m3h3ooj6vp07umlvj</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
