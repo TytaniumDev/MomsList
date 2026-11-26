@@ -13,20 +13,17 @@ extension PumpApp on WidgetTester {
   /// localizations, on an iPhone Pro sized screen at [textScale].
   ///
   /// [overrides] replace providers, for example with a fake
-  /// `authRepositoryProvider`. Pass `settle: false` for a page that never
+  /// `authServiceProvider`. Pass `settle: false` for a page that never
   /// settles, such as one with a spinner.
   Future<void> pumpApp(
     Widget widget, {
     double textScale = 1,
     List<Override> overrides = const [],
-    Brightness brightness = Brightness.light,
     bool settle = true,
   }) async {
     await _pumpOnIPhonePro(
       MaterialApp(
-        theme: brightness == Brightness.light
-            ? AppTheme.light()
-            : AppTheme.dark(),
+        theme: AppTheme.light(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: widget,

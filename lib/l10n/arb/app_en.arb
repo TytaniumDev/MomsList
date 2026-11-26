@@ -60,21 +60,13 @@
     "@signInTitle": {
         "description": "Heading on the sign-in page"
     },
-    "signInMessage": "Sign in so your list is the same on your phone and your computer.",
+    "signInMessage": "Sign in with your Google account so your list is the same on your phone and your computer.",
     "@signInMessage": {
         "description": "Explains why Mom should sign in"
-    },
-    "signInWithAppleButton": "Sign in with Apple",
-    "@signInWithAppleButton": {
-        "description": "Button that signs in with an Apple account"
     },
     "signInWithGoogleButton": "Sign in with Google",
     "@signInWithGoogleButton": {
         "description": "Button that signs in with a Google account"
-    },
-    "signInSameAccountHint": "Use the same button on every device, so you always see the same list.",
-    "@signInSameAccountHint": {
-        "description": "Hint under the sign-in buttons. Signing in with Apple on one device and Google on another makes two separate lists"
     },
     "signInErrorMessage": "Signing in didn't work. Please check your internet connection and try again.",
     "@signInErrorMessage": {

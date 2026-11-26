@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:moms_list/auth/auth.dart';
-import 'package:moms_list/feedback/feedback.dart';
+import 'package:moms_list/app/services/firebase.dart';
+import 'package:moms_list/features/feedback/feedback.dart';
 import 'package:moms_list/firebase_options.dart';
 import 'package:moms_list/l10n/l10n.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -16,7 +15,7 @@ const _sentryDsn =
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   WidgetsFlutterBinding.ensureInitialized();
-  final firebase = await _initFirebase(DefaultFirebaseOptions.currentPlatform);
+  final firebase = await initFirebase(DefaultFirebaseOptions.currentPlatform);
 
   await SentryFlutter.init(
     (options) {
@@ -40,8 +39,3 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     ),
   );
 }
-
-/// Starts Firebase with [options], or returns null without them, so a build
-/// without Firebase config still runs, signed out.
-Future<FirebaseApp?> _initFirebase(FirebaseOptions? options) async =>
-    options == null ? null : await Firebase.initializeApp(options: options);

@@ -13,14 +13,23 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
 - `flutter pub get`
 - `dart format .`
 - `flutter analyze`
-- `very_good test --coverage --test-randomize-ordering-seed random`
-  (CI requires 100% coverage)
+- `dart run build_runner build` after changing a `@riverpod` provider
+  (generated `*.g.dart` files are committed)
+- `very_good test --coverage --exclude-coverage "**/*.g.dart"
+  --test-randomize-ordering-seed random` (CI requires 100% coverage)
 - Run: `flutter run` (single production build, no flavors)
 
 ## Conventions
 
-- Feature-first layout: `lib/<feature>/` with `view/` (and later state)
-  folders and a `<feature>.dart` barrel file. Tests mirror `lib/`.
+- Architecture mirrors Sousvite (TytaniumDev/Sousvite, docs/ENGINEERING.md
+  §4 to §6), scaled down to one app with no packages:
+  - Features are folders: `lib/features/<name>/` with `presentation/`,
+    `application/` (providers and notifiers) and `data/` when needed.
+  - A feature's public surface is one file, `lib/features/<name>/<name>.dart`.
+    Other features import only that file.
+  - External services sit behind interfaces in `lib/app/services/`, with a
+    stub implementation for builds without config (`SignedOutAuthService`).
+  - Tests mirror `lib/`.
 - Import `package:material_ui/material_ui.dart` rather than
   `package:flutter/material.dart`, like the template.
 - All user-facing strings go in `lib/l10n/arb/app_en.arb` and are read with
@@ -33,16 +42,16 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   with `pumpApp(..., textScale: scale)` and calls
   `expectAccessibilityGuidelines()` (all from `test/helpers/helpers.dart`).
 - Every page's `AppBar` includes `FeedbackButton()` (from
-  `lib/feedback/`) in its `actions`, so Mom can always send feedback. It opens
+  `lib/features/feedback/`) in its `actions`, so Mom can always send feedback. It opens
   Sentry's feedback form with a screenshot of the page attached.
 - No IDE folders (`.idea/`, `.vscode/`) and no build flavors: there is one
   production build from `lib/main.dart`.
-- State management is Riverpod (`flutter_riverpod`, plain providers, no code
-  generation). A feature's providers live in `lib/<feature>/state/`, its
-  repositories in `lib/<feature>/data/`. Tests override providers through
-  `pumpApp(..., overrides: [...])`.
-- Sign-in and sync use Firebase (Auth now, Firestore next), mirroring
-  Sousvite. `lib/firebase_options.dart` returns null until the Firebase
-  project exists; without it the app skips sign-in and runs as before.
+- State management is Riverpod 3 with code generation only (`@riverpod`,
+  `@Riverpod(keepAlive: true)` for app-wide state such as auth). `ref.watch`
+  in `build`, `ref.read` in callbacks. Riverpod is the only DI. Tests
+  override providers through `pumpApp(..., overrides: [...])`.
+- Sign-in is Google only, through Firebase Auth (project `moms-list-app`).
+  Sync will use Firestore. `lib/firebase_options.dart` has the iOS and web
+  config; other platforms get null and run signed out.
 - PR titles follow Conventional Commits (`feat:`, `fix:`, `chore:` ...);
   CI checks this.

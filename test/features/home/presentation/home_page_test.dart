@@ -1,0 +1,49 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:moms_list/app/services/auth_service.dart';
+import 'package:moms_list/features/feedback/feedback.dart';
+import 'package:moms_list/features/home/home.dart';
+
+import '../../../helpers/helpers.dart';
+
+void main() {
+  group(HomePage, () {
+    testWidgets('renders the empty lists message', (tester) async {
+      await tester.pumpApp(const HomePage());
+
+      expect(
+        find.text('Your grocery lists will show up here.'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('shows the feedback button in the app bar', (tester) async {
+      await tester.pumpApp(const HomePage());
+
+      expect(find.byType(FeedbackButton), findsOneWidget);
+    });
+
+    testWidgets('shows the sign-out button when signed in', (tester) async {
+      final auth = MockAuthService();
+      when(auth.watchUser).thenAnswer((_) => Stream.value(testUser));
+
+      await tester.pumpApp(
+        const HomePage(),
+        overrides: [authServiceProvider.overrideWithValue(auth)],
+      );
+
+      expect(find.byTooltip('Sign out'), findsOneWidget);
+    });
+
+    for (final MapEntry(key: name, value: scale)
+        in textScalesUnderTest.entries) {
+      testWidgets('meets accessibility guidelines at $name text size', (
+        tester,
+      ) async {
+        await tester.pumpApp(const HomePage(), textScale: scale);
+
+        await tester.expectAccessibilityGuidelines();
+      });
+    }
+  });
+}
