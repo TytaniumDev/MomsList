@@ -24,7 +24,9 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
 - Architecture mirrors Sousvite (TytaniumDev/Sousvite, docs/ENGINEERING.md
   §4 to §6), scaled down to one app with no packages:
   - Features are folders: `lib/features/<name>/` with `presentation/`,
-    `application/` (providers and notifiers) and `data/` when needed.
+    `application/` (providers and notifiers), and `domain/` (entities,
+    repository interfaces, pure logic) and `data/` (implementations) when
+    needed.
   - A feature's public surface is one file, `lib/features/<name>/<name>.dart`.
     Other features import only that file.
   - External services sit behind interfaces in `lib/app/services/`, with a
@@ -51,7 +53,9 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   in `build`, `ref.read` in callbacks. Riverpod is the only DI. Tests
   override providers through `pumpApp(..., overrides: [...])`.
 - Sign-in is Google only, through Firebase Auth (project `moms-list-app`).
-  Sync will use Firestore. `lib/firebase_options.dart` has the iOS and web
-  config; other platforms get null and run signed out.
+  Stores and items sync through Firestore (`lib/features/grocery/`), with
+  the offline cache on. Without Firebase or while signed out, the app uses
+  `InMemoryGroceryRepository`. `firestore.rules` is owner-only; change it
+  together with `test/firestore_rules_test.dart`.
 - PR titles follow Conventional Commits (`feat:`, `fix:`, `chore:` ...);
   CI checks this.

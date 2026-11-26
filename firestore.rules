@@ -1,0 +1,13 @@
+rules_version = '2';
+
+// Mom's stores and items live under her own user document
+// (lib/features/grocery/data/firestore_grocery_repository.dart). Only the
+// signed-in owner can read or change them. Anything not matched below is
+// denied. Tested in test/firestore_rules_test.dart.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
