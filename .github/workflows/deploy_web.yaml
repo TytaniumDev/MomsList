@@ -1,0 +1,60 @@
+name: Deploy web app
+
+# Builds the Flutter web app and deploys it to Firebase Hosting on the
+# `moms-list-app` project: https://moms-list-app.web.app
+# Mirrored from Sousvite's deploy_web.yaml. Runs on every push to main,
+# after CI has already checked the change.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ios/**
+      - android/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-web
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # A service account key for the Firebase project. Until it is added
+      # (see README "Web app"), the build still runs and the deploy is
+      # skipped.
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v7
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          flutter-version: "3.47.x"
+          channel: stable
+          cache: true
+
+      - name: 📦 Install Dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: 🌐 Build
+        run: flutter build web --release
+
+      - name: ⚠️ Deploy credential missing
+        if: env.FIREBASE_SERVICE_ACCOUNT == ''
+        run: echo "::warning::FIREBASE_SERVICE_ACCOUNT is not set, so the web app was built but not deployed. See the README's Web app section."
+
+      - name: 🚀 Deploy to Firebase Hosting
+        if: env.FIREBASE_SERVICE_ACCOUNT != ''
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: moms-list-app
+          channelId: live
