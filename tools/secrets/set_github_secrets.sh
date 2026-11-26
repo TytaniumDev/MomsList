@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Sets the GitHub Actions secrets that the TestFlight release workflow
-# (.github/workflows/release.yaml) reads. Mirrored from Sousvite's script.
+# (.github/workflows/release.yaml) and the web deploy
+# (.github/workflows/deploy_web.yaml) read. Mirrored from Sousvite's script.
 #
 # Run it on your own computer. Secret values go straight from files or
 # hidden prompts to GitHub. They are never printed, and nothing is written
@@ -11,7 +12,8 @@
 #
 # The secrets folder defaults to ~/Sousvite-secrets, because the App Store
 # Connect API key is shared by every app on the team. It should hold one
-# AuthKey_<KEY ID>.p8 file.
+# AuthKey_<KEY ID>.p8 file, and moms-list-firebase-deploy.json for the web
+# deploy.
 #
 # Requirements: the GitHub CLI (`brew install gh`, then `gh auth login`) and,
 # for the match secrets, the Doppler CLI signed in (otherwise you are asked).
@@ -106,6 +108,17 @@ match_secrets() {
   done
 }
 
+# Stores a JSON key file from the secrets folder under the given name.
+json_file_secret() {
+  local name="$1" file="$DIR/$2"
+  if [[ -f "$file" ]]; then
+    say "$name:"
+    set_secret "$name" <"$file"
+  else
+    say "$name: no $2 in $DIR, skipped."
+  fi
+}
+
 sentry_token() {
   if has_secret SENTRY_AUTH_TOKEN; then
     say "SENTRY_AUTH_TOKEN: already set, kept."
@@ -128,6 +141,7 @@ main() {
   say ""
 
   app_store_connect_key
+  json_file_secret FIREBASE_SERVICE_ACCOUNT moms-list-firebase-deploy.json
   match_secrets
   sentry_token
 }

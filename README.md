@@ -55,6 +55,7 @@ in `ios/Runner.xcodeproj`.
    | `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_API_KEY` | The team's App Store Connect API key (`AuthKey_<key id>.p8`) |
    | `MATCH_PASSWORD`, `MATCH_SSH_PRIVATE_KEY` | The match password and the certificates repo's deploy key, from Doppler |
    | `SENTRY_AUTH_TOKEN` | A Sentry org auth token (optional, uploads debug symbols) |
+   | `FIREBASE_SERVICE_ACCOUNT` | `moms-list-firebase-deploy.json`, for the web deploy (see Web app below) |
 
 3. Create the App Store profile once, on a computer that can push to the
    certificates repo:
@@ -78,6 +79,31 @@ TestFlight builds expire after 90 days, so make sure something merges at
 least that often.
 
 ---
+
+## Web app 🌐
+
+Every push to `main` builds the web app and deploys it to Firebase Hosting
+at **https://moms-list-app.web.app** (`.github/workflows/deploy_web.yaml`,
+mirrored from Sousvite). Mom signs in with the same Google account as on her
+iPhone, so she sees the same list. You can also deploy from the Actions tab
+with **Run workflow**.
+
+### One-time setup
+
+The deploy needs a service account key for the `moms-list-app` Firebase
+project. Until it is set, the workflow builds the app and skips the deploy
+with a warning.
+
+1. In [Google Cloud → IAM → Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts?project=moms-list-app),
+   create `github-deploy` with the roles **Firebase Hosting Admin**,
+   **API Keys Viewer** and **Cloud Run Viewer**.
+2. On its **Keys** tab, add a JSON key and save it as
+   `~/Sousvite-secrets/moms-list-firebase-deploy.json`.
+3. Run `tools/secrets/set_github_secrets.sh`, which sets
+   `FIREBASE_SERVICE_ACCOUNT` from that file.
+
+To try it locally instead, run `flutter run -d chrome`. Google sign-in works
+on `localhost`, which Firebase Auth allows by default.
 
 ## Running Tests 🧪
 
