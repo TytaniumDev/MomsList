@@ -325,7 +325,7 @@ final class ItemSuggestionsForProvider
 }
 
 String _$itemSuggestionsForHash() =>
-    r'9079b0f582ac0d3d7b10a216ab2c4e5ce48cfc7e';
+    r'67602c1447770831e15a6c12a989d41d988edb47';
 
 /// Up to [limit] previously entered names matching [query] at [storeId].
 /// See [itemSuggestions].

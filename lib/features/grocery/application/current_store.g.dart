@@ -219,4 +219,4 @@ final class CurrentStoreProvider
   }
 }
 
-String _$currentStoreHash() => r'1045f797ec80a28da92812497dc81c138ce2659a';
+String _$currentStoreHash() => r'fa72e4e4582fc1f909101791348f0b94d3ac7f7c';

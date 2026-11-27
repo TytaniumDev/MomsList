@@ -77,16 +77,13 @@ void main() {
       expect(find.byType(SuggestionList), findsNothing);
     });
 
-    testWidgets('suggests items from other stores', (tester) async {
+    testWidgets("doesn't suggest other stores' items", (tester) async {
       await pumpView(tester);
 
       await tester.enterText(find.byType(TextField), 'mi');
       await tester.pump();
 
-      expect(
-        find.text('Milk · from Albertsons', findRichText: true),
-        findsOneWidget,
-      );
+      expect(find.byType(SuggestionList), findsNothing);
     });
   });
 }

@@ -52,6 +52,5 @@ List<ItemSuggestion> itemSuggestionsFor(
   query: query,
   storeId: storeId,
   items: ref.watch(groceryItemsProvider).value ?? const [],
-  stores: ref.watch(storesProvider).value ?? const [],
   limit: limit,
 );

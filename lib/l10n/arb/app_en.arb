@@ -113,15 +113,6 @@
     "@suggestionBoughtBefore": {
         "description": "After a suggested item that was checked off on this list before"
     },
-    "suggestionFromStore": "from {store}",
-    "@suggestionFromStore": {
-        "description": "After a suggested item that was entered at another store",
-        "placeholders": {
-            "store": {
-                "type": "String"
-            }
-        }
-    },
     "deleteItemDialogTitle": "Delete {item}?",
     "@deleteItemDialogTitle": {
         "description": "Title of the dialog shown when holding down an item",

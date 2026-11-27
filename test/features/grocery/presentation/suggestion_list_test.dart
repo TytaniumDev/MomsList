@@ -10,12 +10,6 @@ void main() {
     const suggestions = [
       ItemSuggestion(name: 'Milk', source: .onThisList),
       ItemSuggestion(name: 'Mints', source: .boughtBefore),
-      ItemSuggestion(
-        name: 'Mixed nuts',
-        source: .otherStore,
-        storeName: 'Costco',
-      ),
-      ItemSuggestion(name: 'Mango', source: .otherStore),
     ];
 
     testWidgets('says where each suggestion was entered', (tester) async {
@@ -27,11 +21,6 @@ void main() {
 
       expect(find.text('Milk · already on list', findRichText: true), findsOne);
       expect(find.text('Mints · bought before', findRichText: true), findsOne);
-      expect(
-        find.text('Mixed nuts · from Costco', findRichText: true),
-        findsOne,
-      );
-      expect(find.text('Mango · from ', findRichText: true), findsOne);
     });
 
     testWidgets('picks the tapped suggestion', (tester) async {
