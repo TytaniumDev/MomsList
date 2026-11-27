@@ -1,32 +1,58 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:moms_list/features/account/account.dart';
 import 'package:moms_list/features/feedback/feedback.dart';
+import 'package:moms_list/features/grocery/grocery.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
-/// Placeholder landing page until the first real feature lands.
-class HomePage extends StatelessWidget {
+/// The app's main page: the list for the store Mom picked, with the store's
+/// name in the app bar to switch stores.
+class HomePage extends ConsumerWidget {
   const new({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
+    final store = ref.watch(currentStoreProvider);
+    final current = store.value;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.appTitle),
+        toolbarHeight: current == null
+            ? null
+            : StoreSwitcherButton.toolbarHeight(context, current),
+        title: current == null
+            ? Text(l10n.appTitle)
+            : StoreSwitcherButton(store: current),
         actions: const [SignOutButton(), FeedbackButton()],
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(24),
-          children: [
-            Text(l10n.homeWelcome, style: textTheme.headlineMedium),
-            const SizedBox(height: 16),
-            Text(l10n.homeEmptyListsMessage, style: textTheme.bodyLarge),
-          ],
-        ),
+        child: switch (store) {
+          AsyncData(value: final store?) => GroceryListView(
+            key: ValueKey(store.id),
+            storeId: store.id,
+          ),
+          AsyncData() => const NoStoresView(),
+          AsyncError() => _Message(l10n.groceryLoadErrorMessage),
+          AsyncLoading() => Center(
+            child: CircularProgressIndicator(semanticsLabel: l10n.loadingLabel),
+          ),
+        },
       ),
+    );
+  }
+}
+
+class _Message extends StatelessWidget {
+  const new(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(8),
+      children: [Text(text, style: Theme.of(context).textTheme.bodyLarge)],
     );
   }
 }

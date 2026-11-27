@@ -19,6 +19,14 @@ void main() {
       );
     });
 
+    test('uses notepad paper and a green app bar', () {
+      final theme = AppTheme.light();
+
+      expect(theme.scaffoldBackgroundColor, NotepadColors.light.paper);
+      expect(theme.appBarTheme.backgroundColor, theme.colorScheme.primary);
+      expect(AppTheme.dark().extension<NotepadColors>(), NotepadColors.dark);
+    });
+
     test('keeps tap targets padded to the minimum size', () {
       expect(
         AppTheme.light().materialTapTargetSize,
