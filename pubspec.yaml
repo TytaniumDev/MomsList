@@ -20,7 +20,7 @@ dependencies:
   flutter_riverpod: ^3.5.0
   google_sign_in: ^7.2.0
   intl: ^0.20.2
-  material_ui: ^1.11.0
+  material_ui: ^1.11.1
   riverpod_annotation: ^4.0.8
   sentry_flutter: ^10.3.0
   shared_preferences: ^2.5.6
