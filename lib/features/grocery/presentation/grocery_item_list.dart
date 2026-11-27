@@ -7,7 +7,8 @@ import 'package:moms_list/features/grocery/presentation/grocery_item_tile.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
 /// Every item at [storeId]: what to get at the top, then everything already
-/// checked off under a "Got it" heading.
+/// checked off under a "Got it" heading. Checking an item off glides it
+/// down to Got it, and putting it back glides it up.
 class GroceryItemList extends ConsumerWidget {
   const new({required this.storeId, super.key});
 
@@ -21,17 +22,24 @@ class GroceryItemList extends ConsumerWidget {
     final gotIt = items.where((item) => item.checked).toList();
 
     return MarginLine(
-      child: ListView(
-        children: [
-          for (final item in toGet) _tile(item),
-          if (toGet.isEmpty) EmptyState(message: l10n.groceryListEmptyMessage),
-          if (gotIt.isNotEmpty)
-            GotItBand(label: l10n.gotItHeading(gotIt.length)),
-          for (final item in gotIt) _tile(item),
-        ],
+      child: SingleChildScrollView(
+        child: GlidingColumn(
+          children: [
+            for (final item in toGet) _tile(item),
+            if (toGet.isEmpty)
+              EmptyState(key: _emptyKey, message: l10n.groceryListEmptyMessage),
+            if (gotIt.isNotEmpty)
+              GotItBand(key: _gotItKey, label: l10n.gotItHeading(gotIt.length)),
+            for (final item in gotIt) _tile(item),
+          ],
+        ),
       ),
     );
   }
+
+  // Typed by widget, so they can't match an item's `ValueKey<String>`.
+  static const Key _emptyKey = ValueKey(EmptyState);
+  static const Key _gotItKey = ValueKey(GotItBand);
 
   Widget _tile(GroceryItem item) =>
       GroceryItemTile(key: ValueKey(item.id), item: item);

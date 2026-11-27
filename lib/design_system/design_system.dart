@@ -18,6 +18,7 @@ export 'widgets/cover_icon_button.dart';
 export 'widgets/empty_state.dart';
 export 'widgets/entry_row.dart';
 export 'widgets/fade_switcher.dart';
+export 'widgets/gliding_column.dart';
 export 'widgets/got_it_band.dart';
 export 'widgets/header_dropdown.dart';
 export 'widgets/item_row.dart';
