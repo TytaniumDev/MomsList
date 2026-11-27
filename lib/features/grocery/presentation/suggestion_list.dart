@@ -23,9 +23,6 @@ class SuggestionList extends StatelessWidget {
               whereLabel: switch (suggestion.source) {
                 .onThisList => l10n.suggestionOnThisList,
                 .boughtBefore => l10n.suggestionBoughtBefore,
-                .otherStore => l10n.suggestionFromStore(
-                  suggestion.storeName ?? '',
-                ),
               },
               onTap: () => onSelected(suggestion.name),
             ),

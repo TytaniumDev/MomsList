@@ -69,24 +69,22 @@ void main() {
       expect(items.read().value?.map((item) => item.name), ['Eggs']);
     });
 
-    test('itemSuggestionsForProvider suggests from every store', () async {
+    test('itemSuggestionsForProvider suggests only from that store', () async {
       container
         ..listen(storesProvider, (_, _) {})
         ..listen(groceryItemsProvider, (_, _) {});
       await container.read(storesProvider.future);
       await container.read(groceryItemsProvider.future);
 
-      final suggestions = container.read(
-        itemSuggestionsForProvider(storeId: 'costco', query: 'mi'),
-      );
+      ItemSuggestion? suggestFor(String storeId) => container
+          .read(itemSuggestionsForProvider(storeId: storeId, query: 'mi'))
+          .firstOrNull;
 
-      expect(suggestions, const [
-        ItemSuggestion(
-          name: 'Milk',
-          source: SuggestionSource.otherStore,
-          storeName: 'Albertsons',
-        ),
-      ]);
+      expect(suggestFor('costco'), isNull);
+      expect(
+        suggestFor('albertsons'),
+        const ItemSuggestion(name: 'Milk', source: SuggestionSource.onThisList),
+      );
     });
 
     test('itemSuggestionsForProvider is empty while loading', () {
