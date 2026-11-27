@@ -145,11 +145,7 @@
     },
     "switchStoreHint": "Switch store",
     "@switchStoreHint": {
-        "description": "Screen reader hint on the store name in the app bar, which opens the store list"
-    },
-    "storePickerTitle": "Stores",
-    "@storePickerTitle": {
-        "description": "Title of the page listing every store"
+        "description": "Screen reader hint on the store name in the app bar, which drops down the store menu"
     },
     "storeItemsToGet": "{count, plural, =0{Nothing to get} =1{1 to get} other{{count} to get}}",
     "@storeItemsToGet": {

@@ -81,7 +81,7 @@ class AppColors {
   /// The red margin line down the left of a list. Decorative only.
   final Color margin;
 
-  /// Section headings (Got it) and the current store in the picker.
+  /// Section headings (Got it) and the current store in the store menu.
   final Color band;
 
   /// Error text and destructive buttons.

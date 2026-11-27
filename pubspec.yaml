@@ -23,6 +23,7 @@ dependencies:
   material_ui: ^1.11.0
   riverpod_annotation: ^4.0.8
   sentry_flutter: ^10.3.0
+  shared_preferences: ^2.5.6
   uuid: ^4.6.0
 
 dev_dependencies:
@@ -33,6 +34,7 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^1.0.5
   riverpod_generator: ^4.0.10
+  shared_preferences_platform_interface: ^2.4.2
   very_good_analysis: ^11.0.0
 
 flutter:

@@ -5,7 +5,7 @@ import 'package:moms_list/features/grocery/application/grocery_providers.dart';
 import 'package:moms_list/features/grocery/domain/store.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
-/// A store in the store picker, as a [StoreRow] with how many items are
+/// A store in the store menu, as a [StoreRow] with how many items are
 /// left to get there.
 class StoreTile extends ConsumerWidget {
   const new({

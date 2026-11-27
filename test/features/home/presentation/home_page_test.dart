@@ -36,9 +36,11 @@ void main() {
 
       await tester.tap(find.text('Costco'));
       await tester.pumpAndSettle();
+      expect(find.byType(StoreMenu), findsOneWidget);
       await tester.tap(find.text('Albertsons'));
       await tester.pumpAndSettle();
 
+      expect(find.byType(StoreMenu), findsNothing);
       expect(find.text('Milk'), findsOneWidget);
       expect(find.text('Eggs'), findsNothing);
     });

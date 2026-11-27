@@ -10,7 +10,7 @@ import 'package:moms_list/design_system/tokens/app_spacing.dart';
 /// off. Give the [AppBar] a matching [toolbarHeight] so it fits.
 ///
 /// With [onTap], it shows a ▼ and is a button, such as the store name that
-/// opens the store picker.
+/// opens the store menu.
 class HeaderTitle extends StatelessWidget {
   const new(this.text, {this.onTap, this.tapHint, super.key});
 
