@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/design_system/tokens/app_motion.dart';
 import 'package:moms_list/design_system/tokens/app_spacing.dart';
+import 'package:moms_list/design_system/widgets/fade_switcher.dart';
 
 /// The page title in the navy header, in the `store-title` style, at the
 /// full system text size. Part of `PageScaffold`.
@@ -10,7 +12,8 @@ import 'package:moms_list/design_system/tokens/app_spacing.dart';
 /// off. Give the [AppBar] a matching [toolbarHeight] so it fits.
 ///
 /// With [onTap], it shows a ▼ and is a button, such as the store name that
-/// opens the store menu.
+/// opens the store menu. A new [text], such as after switching stores,
+/// cross-fades in.
 class HeaderTitle extends StatelessWidget {
   const new(this.text, {this.onTap, this.tapHint, super.key});
 
@@ -75,7 +78,12 @@ class HeaderTitle extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(child: Text(text, style: _style(context))),
+          Flexible(
+            child: FadeSwitcher(
+              duration: AppMotion.quick,
+              child: Text(text, key: ValueKey(text), style: _style(context)),
+            ),
+          ),
           if (onTap != null)
             Icon(Icons.arrow_drop_down, size: textScaler.scale(_iconSize)),
         ],

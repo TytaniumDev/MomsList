@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:moms_list/app/services/auth_service.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/feedback/feedback.dart';
 import 'package:moms_list/features/grocery/data/in_memory_grocery_repository.dart';
 import 'package:moms_list/features/grocery/domain/grocery_repository.dart';
@@ -42,6 +43,25 @@ void main() {
 
       expect(find.byType(StoreMenu), findsNothing);
       expect(find.text('Milk'), findsOneWidget);
+      expect(find.text('Eggs'), findsNothing);
+    });
+
+    testWidgets("fades from one store's list to the next", (tester) async {
+      await tester.pumpApp(
+        const HomePage(),
+        overrides: groceryOverrides(await seededGroceries()),
+      );
+
+      await tester.tap(find.text('Costco'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Albertsons'));
+      await tester.pump();
+      await tester.pump();
+      await tester.pump(AppMotion.quick);
+
+      expect(find.text('Eggs'), findsOneWidget);
+      expect(find.text('Milk'), findsOneWidget);
+      await tester.pumpAndSettle();
       expect(find.text('Eggs'), findsNothing);
     });
 

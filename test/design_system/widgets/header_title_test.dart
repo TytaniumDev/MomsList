@@ -59,6 +59,21 @@ void main() {
       expect(find.byType(InkWell), findsNothing);
     });
 
+    testWidgets('cross-fades to a new title', (tester) async {
+      Widget header(String title) =>
+          Scaffold(appBar: AppBar(title: HeaderTitle(title)));
+      await tester.pumpApp(header('Costco'));
+
+      await tester.pumpApp(header('Target'), settle: false);
+      await tester.pump();
+      expect(find.text('Costco'), findsOneWidget);
+      expect(find.text('Target'), findsOneWidget);
+
+      await tester.pumpAndSettle();
+      expect(find.text('Costco'), findsNothing);
+      expect(find.text('Target'), findsOneWidget);
+    });
+
     testWidgets('is a button with a hint when it has onTap', (tester) async {
       var taps = 0;
       await tester.pumpApp(

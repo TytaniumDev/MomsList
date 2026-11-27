@@ -41,7 +41,7 @@ void main() {
 
       expect(find.byIcon(Icons.arrow_drop_down), findsOneWidget);
       await tester.tap(find.text('Costco'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(
         tester.getTopLeft(find.text('Albertsons')).dy,
