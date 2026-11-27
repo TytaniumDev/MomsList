@@ -64,8 +64,8 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   with `pumpApp(..., textScale: scale)` and calls
   `expectAccessibilityGuidelines()` (all from `test/helpers/helpers.dart`).
 - Every page is a `PageScaffold` whose `actions` end with
-  `FeedbackButton()` (from
-  `lib/features/feedback/`) in its `actions`, so Mom can always send feedback. It opens
+  `FeedbackButton()` (from `lib/features/feedback/`), so Mom can always
+  send feedback. It opens
   Sentry's feedback form with a screenshot of the page attached.
 - No IDE folders (`.idea/`, `.vscode/`) and no build flavors: there is one
   production build from `lib/main.dart`.
