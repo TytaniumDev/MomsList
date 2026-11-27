@@ -1,10 +1,12 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/theme/app_spacing.dart';
-import 'package:moms_list/app/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/tokens/app_spacing.dart';
 
-/// A big, high-contrast text box with a button beside it, for typing a new
-/// item or store. Pressing return does the same as the button.
-class TextEntryRow extends StatelessWidget {
+/// The text box at the top of a list with its button beside it, for typing
+/// a new item or store. Pressing return does the same as the button.
+///
+/// A heavy ink rule under the row separates it from the list.
+class EntryRow extends StatelessWidget {
   const new({
     required this.controller,
     required this.hintText,
@@ -18,8 +20,9 @@ class TextEntryRow extends StatelessWidget {
   final FocusNode? focusNode;
   final String hintText;
 
-  /// Shown beside the box, usually a filled button that calls
-  /// [onSubmitted] with the box's text.
+  /// Shown beside the box: a `CoverIconButton` with an add icon, or a
+  /// `FilledButton` such as "Add". It should call [onSubmitted] with the
+  /// box's text.
   final Widget button;
   final ValueChanged<String> onSubmitted;
 
@@ -72,6 +75,7 @@ class TextEntryRow extends StatelessWidget {
                 ),
                 border: border,
                 enabledBorder: border,
+                // The accent blue: navy in light mode, light blue in dark.
                 focusedBorder: border.copyWith(
                   borderSide: border.borderSide.copyWith(
                     color: theme.colorScheme.primary,

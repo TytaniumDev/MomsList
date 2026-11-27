@@ -22,7 +22,7 @@ void main() {
         overrides: groceryOverrides(await seededGroceries()),
       );
 
-      expect(find.byType(StoreSwitcherButton), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_drop_down), findsOneWidget);
       expect(find.text('Costco'), findsOneWidget);
       expect(find.text('Eggs'), findsOneWidget);
       expect(find.byType(FeedbackButton), findsOneWidget);

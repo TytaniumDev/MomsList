@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/grocery/application/current_store.dart';
 import 'package:moms_list/features/grocery/application/grocery_controller.dart';
-import 'package:moms_list/features/grocery/presentation/text_entry_row.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
 /// A box for adding a store, such as Costco. The new store's list opens
@@ -37,7 +37,7 @@ class _NewStoreFieldState extends ConsumerState<NewStoreField> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return TextEntryRow(
+    return EntryRow(
       controller: _controller,
       hintText: l10n.newStoreHint,
       onSubmitted: (_) => _add(),

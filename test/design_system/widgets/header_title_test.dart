@@ -1,26 +1,28 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/view/full_size_app_bar_title.dart';
+import 'package:moms_list/design_system/widgets/header_title.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
-  group(FullSizeAppBarTitle, () {
+  group(HeaderTitle, () {
     const longName = 'Albertsons on Main Street by the old post office';
 
     Future<double> heightFor(
       WidgetTester tester,
       String text, {
       double textScale = 1,
+      int actionCount = 0,
       bool hasTrailingIcon = false,
     }) async {
       late double height;
       await tester.pumpApp(
         Builder(
           builder: (context) {
-            height = FullSizeAppBarTitle.toolbarHeight(
+            height = HeaderTitle.toolbarHeight(
               context,
               text,
+              actionCount: actionCount,
               hasTrailingIcon: hasTrailingIcon,
             );
             return const SizedBox();
@@ -34,12 +36,7 @@ void main() {
     testWidgets('shows the title at the full text size', (tester) async {
       await tester.pumpApp(
         Scaffold(
-          appBar: AppBar(
-            title: const FullSizeAppBarTitle(
-              'Costco',
-              trailingIcon: Icons.arrow_drop_down,
-            ),
-          ),
+          appBar: AppBar(title: HeaderTitle('Costco', onTap: () {})),
         ),
         textScale: 3.12,
       );
@@ -49,6 +46,38 @@ void main() {
       expect(
         tester.getSize(find.byIcon(Icons.arrow_drop_down)).width,
         24 * 3.12,
+      );
+    });
+
+    testWidgets('is a plain title without onTap', (tester) async {
+      await tester.pumpApp(
+        Scaffold(appBar: AppBar(title: const HeaderTitle('Stores'))),
+      );
+
+      expect(find.text('Stores'), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_drop_down), findsNothing);
+      expect(find.byType(InkWell), findsNothing);
+    });
+
+    testWidgets('is a button with a hint when it has onTap', (tester) async {
+      var taps = 0;
+      await tester.pumpApp(
+        Scaffold(
+          appBar: AppBar(
+            title: HeaderTitle(
+              'Costco',
+              onTap: () => taps++,
+              tapHint: 'Switch store',
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Costco'));
+      expect(taps, 1);
+      expect(
+        tester.getSemantics(find.byType(InkWell)),
+        isSemantics(isButton: true, hint: 'Switch store'),
       );
     });
 
@@ -69,6 +98,18 @@ void main() {
 
       expect(oneLine, greaterThan(kToolbarHeight));
       expect(wrapped, greaterThan(oneLine * 2));
+    });
+
+    testWidgets('leaves room for the actions', (tester) async {
+      final noActions = await heightFor(tester, longName, textScale: 2);
+      final twoActions = await heightFor(
+        tester,
+        longName,
+        textScale: 2,
+        actionCount: 2,
+      );
+
+      expect(twoActions, greaterThan(noActions));
     });
   });
 }

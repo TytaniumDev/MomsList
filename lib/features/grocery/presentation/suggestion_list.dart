@@ -1,7 +1,6 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/grocery/domain/item_suggestions.dart';
-import 'package:moms_list/features/grocery/presentation/margin_line.dart';
-import 'package:moms_list/features/grocery/presentation/ruled_row.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
 /// Items entered before that match what Mom is typing. Tapping one adds it
@@ -14,51 +13,23 @@ class SuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return MarginLine(
       child: ListView(
         children: [
           for (final suggestion in suggestions)
-            _SuggestionTile(
-              suggestion: suggestion,
+            SuggestionRow(
+              name: suggestion.name,
+              whereLabel: switch (suggestion.source) {
+                .onThisList => l10n.suggestionOnThisList,
+                .boughtBefore => l10n.suggestionBoughtBefore,
+                .otherStore => l10n.suggestionFromStore(
+                  suggestion.storeName ?? '',
+                ),
+              },
               onTap: () => onSelected(suggestion.name),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _SuggestionTile extends StatelessWidget {
-  const new({required this.suggestion, required this.onTap});
-
-  final ItemSuggestion suggestion;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final where = switch (suggestion.source) {
-      .onThisList => l10n.suggestionOnThisList,
-      .boughtBefore => l10n.suggestionBoughtBefore,
-      .otherStore => l10n.suggestionFromStore(suggestion.storeName ?? ''),
-    };
-
-    return RuledRow(
-      onTap: onTap,
-      child: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: suggestion.name),
-            TextSpan(
-              text: ' · $where',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-        style: theme.textTheme.bodyLarge,
       ),
     );
   }

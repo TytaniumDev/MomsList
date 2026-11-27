@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/theme/app_spacing.dart';
-import 'package:moms_list/app/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/tokens/app_spacing.dart';
 
 /// One tappable line of the notepad: full width, a rule line underneath and
 /// almost no padding, so as much text as possible fits on screen.

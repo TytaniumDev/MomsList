@@ -38,20 +38,33 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   `context.l10n`.
 - Keep modules small and single-purpose; prefer extracting a reusable widget
   over growing a file.
-- Styling follows the Mom's List design system (Lato type):
-  `AppTheme.legalPad()` in light mode and `AppTheme.blackPad()` in dark
-  mode, following the phone. Use the tokens in `lib/app/theme/`
-  (`AppColors`, `AppSpacing`, `AppRadii`, `AppStrokes`, the text theme and
-  `NotepadColors`) through the theme instead of raw colors or numbers.
-  `ColorScheme.primary` is the accent blue for marks on the paper; filled
-  buttons and the app bar use the navy cover. Sizes are designed at
-  375pt wide and text scale 1.0, which is Mom's real setup.
+- Styling follows the Mom's List design system, locked 2026-11-26
+  (https://claude.ai/artifact/LAZBw61TibWwNXD6CKWv1G). Change it there
+  first, then in `lib/design_system/`, which holds its tokens
+  (`AppColors`, `AppSpacing`, `AppRadii`, `AppStrokes`, the Lato text
+  theme), themes (`AppTheme.legalPad()` for light mode and
+  `AppTheme.blackPad()` for dark mode, following the phone, plus
+  `NotepadColors`) and one widget per component (`PageScaffold`,
+  `EntryRow`, `CoverIconButton`, `ItemRow`, `GotItBand`, `StoreRow`,
+  `SuggestionRow`, `ConfirmDialog`, `EmptyState`, with `RuledRow` and
+  `MarginLine` underneath). Import only
+  `package:moms_list/design_system/design_system.dart`.
+  - Features build screens from these widgets and read colors through the
+    theme, never raw colors or numbers. `ColorScheme.primary` is the
+    accent blue for marks on the paper; filled buttons and the header use
+    the navy cover.
+  - Design system widgets take plain values and labels (never entities,
+    providers or `context.l10n`), and are tested in both themes with
+    `brightnessesUnderTest`.
+  - Sizes are designed at 375pt wide and text scale 1.0, which is Mom's
+    real setup.
 - Never clamp or override `TextScaler`. Layouts must reflow (wrap, scroll,
   stack vertically) instead of truncating at large text sizes.
 - Every page gets a widget test that loops over `textScalesUnderTest`, pumps
   with `pumpApp(..., textScale: scale)` and calls
   `expectAccessibilityGuidelines()` (all from `test/helpers/helpers.dart`).
-- Every page's `AppBar` includes `FeedbackButton()` (from
+- Every page is a `PageScaffold` whose `actions` end with
+  `FeedbackButton()` (from
   `lib/features/feedback/`) in its `actions`, so Mom can always send feedback. It opens
   Sentry's feedback form with a screenshot of the page attached.
 - No IDE folders (`.idea/`, `.vscode/`) and no build flavors: there is one

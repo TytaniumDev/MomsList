@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/theme/app_theme.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/account/account.dart';
 import 'package:moms_list/l10n/l10n.dart';
 

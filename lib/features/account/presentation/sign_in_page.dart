@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/account/application/account_controller.dart';
 import 'package:moms_list/features/feedback/feedback.dart';
 import 'package:moms_list/l10n/l10n.dart';
@@ -14,23 +15,19 @@ class SignInPage extends ConsumerWidget {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.appTitle),
-        actions: const [FeedbackButton()],
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(24),
-          children: [
-            Text(l10n.signInTitle, style: textTheme.headlineMedium),
-            const SizedBox(height: 16),
-            Text(l10n.signInMessage, style: textTheme.bodyLarge),
-            const SizedBox(height: 32),
-            const _GoogleSignInButton(),
-            const _SignInError(),
-          ],
-        ),
+    return PageScaffold(
+      title: l10n.appTitle,
+      actions: const [FeedbackButton()],
+      body: ListView(
+        padding: const EdgeInsets.all(24),
+        children: [
+          Text(l10n.signInTitle, style: textTheme.headlineMedium),
+          const SizedBox(height: 16),
+          Text(l10n.signInMessage, style: textTheme.bodyLarge),
+          const SizedBox(height: 32),
+          const _GoogleSignInButton(),
+          const _SignInError(),
+        ],
       ),
     );
   }
