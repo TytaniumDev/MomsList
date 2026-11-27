@@ -10,4 +10,4 @@ export 'domain/item_suggestions.dart';
 export 'domain/store.dart';
 export 'presentation/grocery_list_view.dart';
 export 'presentation/no_stores_view.dart';
-export 'presentation/store_picker_page.dart';
+export 'presentation/store_menu.dart';

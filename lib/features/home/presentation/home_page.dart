@@ -19,7 +19,10 @@ class HomePage extends ConsumerWidget {
 
     return PageScaffold(
       title: current?.name ?? l10n.appTitle,
-      onTitleTap: current == null ? null : () => StorePickerPage.open(context),
+      titleDropdown: current == null
+          ? null
+          : (menuContext) =>
+                StoreMenu(onDone: () => Navigator.of(menuContext).pop()),
       titleTapHint: l10n.switchStoreHint,
       actions: const [SignOutButton(), FeedbackButton()],
       body: switch (store) {

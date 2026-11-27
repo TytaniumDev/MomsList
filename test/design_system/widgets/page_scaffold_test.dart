@@ -27,21 +27,26 @@ void main() {
       expect(find.byIcon(Icons.arrow_drop_down), findsNothing);
     });
 
-    testWidgets('makes the title a button with onTitleTap', (tester) async {
-      var taps = 0;
+    testWidgets('drops titleDropdown down from under the header', (
+      tester,
+    ) async {
       await tester.pumpApp(
         PageScaffold(
           title: 'Costco',
-          onTitleTap: () => taps++,
+          titleDropdown: (_) => const Text('Albertsons'),
           titleTapHint: 'Switch store',
           body: const SizedBox(),
         ),
       );
 
-      await tester.tap(find.text('Costco'));
-
-      expect(taps, 1);
       expect(find.byIcon(Icons.arrow_drop_down), findsOneWidget);
+      await tester.tap(find.text('Costco'));
+      await tester.pump();
+
+      expect(
+        tester.getTopLeft(find.text('Albertsons')).dy,
+        greaterThanOrEqualTo(tester.getBottomLeft(find.byType(AppBar)).dy),
+      );
     });
 
     testWidgets('grows the header to fit a long title', (tester) async {
@@ -64,7 +69,7 @@ void main() {
         await tester.pumpApp(
           PageScaffold(
             title: 'Costco',
-            onTitleTap: () {},
+            titleDropdown: (_) => const SizedBox(),
             body: const Text('Body'),
           ),
           brightness: brightness,

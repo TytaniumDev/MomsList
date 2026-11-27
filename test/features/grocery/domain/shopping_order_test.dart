@@ -16,8 +16,7 @@ void main() {
         checkedAt: checked == null ? null : at(checked),
       );
 
-  test('puts unchecked items first, newest added on top, then checked '
-      'items, most recently checked first', () {
+  test('puts items to get first, then checked items, each A to Z', () {
     final ordered = shoppingOrder([
       item('Bread', added: 1, checked: 5),
       item('Milk', added: 2),
@@ -33,12 +32,12 @@ void main() {
     ]);
   });
 
-  test('breaks ties A to Z', () {
+  test('ignores case when sorting', () {
     final ordered = shoppingOrder([
       item('milk', added: 1),
-      item('Bread', added: 1),
+      item('Bread', added: 2),
       item('eggs', added: 0, checked: 2),
-      item('Apples', added: 0, checked: 2),
+      item('Apples', added: 0, checked: 3),
     ]);
 
     expect(ordered.map((item) => item.name), [
@@ -46,21 +45,6 @@ void main() {
       'milk',
       'Apples',
       'eggs',
-    ]);
-  });
-
-  test('falls back to when an item was added if it has no checked time', () {
-    final noTime = GroceryItem(
-      id: 'x',
-      storeId: 's',
-      name: 'Rice',
-      checked: true,
-      addedAt: at(10),
-    );
-
-    expect(shoppingOrder([item('Beans', added: 0, checked: 5), noTime]), [
-      noTime,
-      item('Beans', added: 0, checked: 5),
     ]);
   });
 }

@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:moms_list/design_system/tokens/app_spacing.dart';
 import 'package:moms_list/design_system/widgets/ruled_row.dart';
 
-/// A store in the store picker, with a second line such as "3 to get".
+/// A store in the store menu, with a second line such as "3 to get".
 /// The [selected] store has the blue band behind it and a check mark.
 class StoreRow extends StatelessWidget {
   const new({
