@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/app/theme/notepad_colors.dart';
 import 'package:moms_list/features/grocery/application/grocery_controller.dart';
 import 'package:moms_list/features/grocery/application/grocery_providers.dart';
 import 'package:moms_list/features/grocery/presentation/grocery_item_list.dart';
@@ -54,6 +55,7 @@ class _GroceryListViewState extends ConsumerState<GroceryListView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final iconSize = MediaQuery.textScalerOf(context).scale(24);
+    final notepad = NotepadColors.of(context);
     final suggestions = ref.watch(
       itemSuggestionsForProvider(
         storeId: widget.storeId,
@@ -72,6 +74,12 @@ class _GroceryListViewState extends ConsumerState<GroceryListView> {
             onPressed: () => _add(_controller.text),
             tooltip: l10n.addItemButtonTooltip,
             iconSize: iconSize,
+            // The navy cover, like the other filled buttons, rather than
+            // the lighter blue used for marks on the paper.
+            style: IconButton.styleFrom(
+              backgroundColor: notepad.cover,
+              foregroundColor: notepad.onCover,
+            ),
             icon: const Icon(Icons.add),
           ),
         ),

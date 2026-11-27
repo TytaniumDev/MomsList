@@ -9,8 +9,9 @@ import 'package:moms_list/l10n/l10n.dart';
 const Size iPhoneProSize = Size(402, 874);
 
 extension PumpApp on WidgetTester {
-  /// Pumps [widget] inside a [MaterialApp] with the app's theme and
-  /// localizations, on an iPhone Pro sized screen at [textScale].
+  /// Pumps [widget] inside a [MaterialApp] with the app's themes and
+  /// localizations, on an iPhone Pro sized screen at [textScale]. Pass
+  /// `brightness: Brightness.dark` to see the dark theme.
   ///
   /// [overrides] replace providers, for example with a fake
   /// `authServiceProvider`. Pass `settle: false` for a page that never
@@ -18,12 +19,16 @@ extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     double textScale = 1,
+    Brightness brightness = Brightness.light,
     List<Override> overrides = const [],
     bool settle = true,
   }) async {
+    platformDispatcher.platformBrightnessTestValue = brightness;
+    addTearDown(platformDispatcher.clearPlatformBrightnessTestValue);
     await _pumpOnIPhonePro(
       MaterialApp(
         theme: AppTheme.legalPad(),
+        darkTheme: AppTheme.blackPad(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: widget,
