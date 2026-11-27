@@ -41,13 +41,13 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
 - Styling follows the Mom's List design system, locked 2026-11-26
   (https://claude.ai/artifact/LAZBw61TibWwNXD6CKWv1G). Change it there
   first, then in `lib/design_system/`, which holds its tokens
-  (`AppColors`, `AppSpacing`, `AppRadii`, `AppStrokes`, the Lato text
-  theme), themes (`AppTheme.legalPad()` for light mode and
+  (`AppColors`, `AppSpacing`, `AppRadii`, `AppStrokes`, `AppMotion`, the
+  Lato text theme), themes (`AppTheme.legalPad()` for light mode and
   `AppTheme.blackPad()` for dark mode, following the phone, plus
   `NotepadColors`) and one widget per component (`PageScaffold`,
   `EntryRow`, `CoverIconButton`, `ItemRow`, `GotItBand`, `StoreRow`,
-  `SuggestionRow`, `ConfirmDialog`, `EmptyState`, with `RuledRow` and
-  `MarginLine` underneath). Import only
+  `SuggestionRow`, `ConfirmDialog`, `EmptyState`, `FadeSwitcher`, with
+  `RuledRow` and `MarginLine` underneath). Import only
   `package:moms_list/design_system/design_system.dart`.
   - Features build screens from these widgets and read colors through the
     theme, never raw colors or numbers. `ColorScheme.primary` is the
@@ -58,6 +58,12 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
     `brightnessesUnderTest`.
   - Sizes are designed at 375pt wide and text scale 1.0, which is Mom's
     real setup.
+- Every big UI change (a page's state, a dropdown, one list replacing
+  another) gets a brief, smooth transition instead of a jump: `FadeSwitcher`
+  between keyed states, `AppMotion` durations and curves for anything else.
+  Animate only opacity, transforms and clips, never layout on each frame.
+  Read durations through `AppMotion.durationOf`, and only slide when
+  `AppMotion.allowsMovementOf` (Reduce Motion means fades only).
 - Never clamp or override `TextScaler`. Layouts must reflow (wrap, scroll,
   stack vertically) instead of truncating at large text sizes.
 - Every page gets a widget test that loops over `textScalesUnderTest`, pumps

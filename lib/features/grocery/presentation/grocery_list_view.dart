@@ -10,7 +10,8 @@ import 'package:moms_list/l10n/l10n.dart';
 /// A store's list with the box for adding items at the top.
 ///
 /// While Mom types, items she entered before that match replace the list,
-/// so the matches stay visible above the keyboard. Picking one, or pressing
+/// so the matches stay visible above the keyboard, fading in and out as
+/// they come and go. Picking one, or pressing
 /// return, adds it and clears the box for the next item.
 class GroceryListView extends ConsumerStatefulWidget {
   const new({required this.storeId, super.key});
@@ -74,9 +75,12 @@ class _GroceryListViewState extends ConsumerState<GroceryListView> {
           ),
         ),
         Expanded(
-          child: suggestions.isEmpty
-              ? GroceryItemList(storeId: widget.storeId)
-              : SuggestionList(suggestions: suggestions, onSelected: _add),
+          child: FadeSwitcher(
+            duration: AppMotion.quick,
+            child: suggestions.isEmpty
+                ? GroceryItemList(storeId: widget.storeId)
+                : SuggestionList(suggestions: suggestions, onSelected: _add),
+          ),
         ),
       ],
     );

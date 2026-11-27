@@ -25,21 +25,24 @@ class HomePage extends ConsumerWidget {
                 StoreMenu(onDone: () => Navigator.of(menuContext).pop()),
       titleTapHint: l10n.switchStoreHint,
       actions: const [SignOutButton(), FeedbackButton()],
-      body: switch (store) {
-        AsyncData(value: final store?) => GroceryListView(
-          key: ValueKey(store.id),
-          storeId: store.id,
-        ),
-        AsyncData() => const NoStoresView(),
-        AsyncError() => ListView(
-          children: [
-            EmptyState(message: l10n.groceryLoadErrorMessage, isError: true),
-          ],
-        ),
-        AsyncLoading() => Center(
-          child: CircularProgressIndicator(semanticsLabel: l10n.loadingLabel),
-        ),
-      },
+      // Loading, a store's list, or another store's: fade between them.
+      body: FadeSwitcher(
+        child: switch (store) {
+          AsyncData(value: final store?) => GroceryListView(
+            key: ValueKey(store.id),
+            storeId: store.id,
+          ),
+          AsyncData() => const NoStoresView(),
+          AsyncError() => ListView(
+            children: [
+              EmptyState(message: l10n.groceryLoadErrorMessage, isError: true),
+            ],
+          ),
+          AsyncLoading() => Center(
+            child: CircularProgressIndicator(semanticsLabel: l10n.loadingLabel),
+          ),
+        },
+      ),
     );
   }
 }
