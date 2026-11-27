@@ -23,7 +23,7 @@ extension PumpApp on WidgetTester {
   }) async {
     await _pumpOnIPhonePro(
       MaterialApp(
-        theme: AppTheme.light(),
+        theme: AppTheme.legalPad(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: widget,

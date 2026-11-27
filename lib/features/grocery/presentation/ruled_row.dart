@@ -1,11 +1,13 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/app/theme/app_spacing.dart';
 import 'package:moms_list/app/theme/notepad_colors.dart';
 
 /// One tappable line of the notepad: full width, a rule line underneath and
 /// almost no padding, so as much text as possible fits on screen.
 ///
-/// Rows are at least 48 tall so they are easy to tap at small text sizes,
-/// and grow with the text at large ones.
+/// A one-line row is exactly 48 tall (a 24px line with 12px above and
+/// below) and grows with the text. Text starts past the margin line; put
+/// rows inside a `MarginLine` to draw it.
 class RuledRow extends StatelessWidget {
   const new({
     required this.child,
@@ -23,7 +25,12 @@ class RuledRow extends StatelessWidget {
   final Color? color;
 
   /// Space around a row's text. Kept small on purpose.
-  static const padding = EdgeInsets.symmetric(horizontal: 8, vertical: 2);
+  static const padding = EdgeInsetsDirectional.fromSTEB(
+    AppSpacing.textInset,
+    AppSpacing.row,
+    AppSpacing.row,
+    AppSpacing.row,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +40,14 @@ class RuledRow extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         child: Container(
-          constraints: const BoxConstraints(minHeight: 48),
+          constraints: const BoxConstraints(minHeight: AppSpacing.tapTarget),
           padding: padding,
           alignment: AlignmentDirectional.centerStart,
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
                 color: NotepadColors.of(context).ruleLine,
-                width: 2,
+                width: AppStrokes.rule,
               ),
             ),
           ),

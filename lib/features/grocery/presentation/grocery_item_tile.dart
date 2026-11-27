@@ -21,9 +21,9 @@ class GroceryItemTile extends ConsumerWidget {
         ? theme.textTheme.bodyLarge?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
             decoration: TextDecoration.lineThrough,
-            decorationThickness: 2,
+            decorationColor: theme.colorScheme.onSurface,
           )
-        : theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700);
+        : theme.textTheme.bodyLarge;
 
     return Semantics(
       checked: item.checked,

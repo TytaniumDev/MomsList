@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moms_list/app/services/firebase.dart';
@@ -15,6 +17,10 @@ const _sentryDsn =
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   WidgetsFlutterBinding.ensureInitialized();
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('assets/fonts/lato/OFL.txt');
+    yield LicenseEntryWithLineBreaks(const ['Lato'], license);
+  });
   final firebase = await initFirebase(DefaultFirebaseOptions.currentPlatform);
 
   await SentryFlutter.init(

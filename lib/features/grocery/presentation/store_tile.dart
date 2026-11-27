@@ -38,15 +38,12 @@ class StoreTile extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    store.name,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
+                  Text(store.name, style: theme.textTheme.bodyLarge),
                   Text(
                     l10n.storeItemsToGet(toGet),
-                    style: theme.textTheme.labelLarge,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),

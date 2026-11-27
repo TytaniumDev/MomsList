@@ -1,37 +1,75 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/app/theme/app_colors.dart';
+import 'package:moms_list/app/theme/app_spacing.dart';
+import 'package:moms_list/app/theme/app_text_theme.dart';
 import 'package:moms_list/app/theme/notepad_colors.dart';
 
-/// Builds the app's [ThemeData] variants from a single seed colour.
-///
-/// High-contrast variants are used automatically when the device has
-/// "Increase Contrast" turned on.
+/// The app's one theme, Legal pad, from Mom's List design system
+/// (https://claude.ai/artifact/LAZBw61TibWwNXD6CKWv1G): a yellow legal pad
+/// with a navy cover, Lato throughout, plain and dense.
 abstract final class AppTheme {
-  static const Color _seedColor = Color(0xFF2E7D32);
-
-  static ThemeData light({bool highContrast = false}) =>
-      _build(Brightness.light, highContrast: highContrast);
-
-  static ThemeData dark({bool highContrast = false}) =>
-      _build(Brightness.dark, highContrast: highContrast);
-
-  static ThemeData _build(Brightness brightness, {required bool highContrast}) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: _seedColor,
-      brightness: brightness,
-      contrastLevel: highContrast ? 1 : 0,
+  static ThemeData legalPad() {
+    const colorScheme = ColorScheme(
+      brightness: Brightness.light,
+      primary: AppColors.cover,
+      onPrimary: AppColors.onCover,
+      secondary: AppColors.cover,
+      onSecondary: AppColors.onCover,
+      secondaryContainer: AppColors.band,
+      onSecondaryContainer: AppColors.ink,
+      surface: AppColors.paper,
+      onSurface: AppColors.ink,
+      onSurfaceVariant: AppColors.inkMuted,
+      surfaceContainerHighest: AppColors.band,
+      error: AppColors.error,
+      onError: AppColors.onCover,
+      outline: AppColors.ink,
+      outlineVariant: AppColors.rule,
     );
-    final notepad = brightness == Brightness.light
-        ? NotepadColors.light
-        : NotepadColors.dark;
+    final textTheme = appTextTheme();
+    const controlShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(AppRadii.sm)),
+    );
+
     return ThemeData(
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: notepad.paper,
-      // A solid green header, like the cover of Mom's notepad.
+      fontFamily: appFontFamily,
+      textTheme: textTheme,
+      scaffoldBackgroundColor: AppColors.paper,
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
+        backgroundColor: AppColors.cover,
+        foregroundColor: AppColors.onCover,
+        titleTextStyle: textTheme.titleLarge?.copyWith(
+          color: AppColors.onCover,
+        ),
       ),
-      extensions: [notepad],
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.paperField,
+        shape: controlShape,
+        titleTextStyle: textTheme.headlineSmall,
+        contentTextStyle: textTheme.bodyLarge,
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          shape: controlShape,
+          textStyle: textTheme.labelLarge,
+          minimumSize: const Size.square(AppSpacing.tapTarget),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          shape: controlShape,
+          textStyle: textTheme.labelLarge,
+        ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          shape: controlShape,
+          // As tall as the text boxes they sit beside.
+          minimumSize: const Size.square(AppSpacing.tapTarget),
+        ),
+      ),
+      extensions: const [NotepadColors.legalPad],
       // Keep every tappable control at least 48x48, even on web.
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.standard,

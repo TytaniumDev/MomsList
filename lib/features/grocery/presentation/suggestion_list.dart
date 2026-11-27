@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:moms_list/features/grocery/domain/item_suggestions.dart';
+import 'package:moms_list/features/grocery/presentation/margin_line.dart';
 import 'package:moms_list/features/grocery/presentation/ruled_row.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
@@ -13,14 +14,16 @@ class SuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        for (final suggestion in suggestions)
-          _SuggestionTile(
-            suggestion: suggestion,
-            onTap: () => onSelected(suggestion.name),
-          ),
-      ],
+    return MarginLine(
+      child: ListView(
+        children: [
+          for (final suggestion in suggestions)
+            _SuggestionTile(
+              suggestion: suggestion,
+              onTap: () => onSelected(suggestion.name),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -42,18 +45,14 @@ class _SuggestionTile extends StatelessWidget {
     };
 
     return RuledRow(
-      color: theme.colorScheme.surface,
       onTap: onTap,
       child: Text.rich(
         TextSpan(
           children: [
-            TextSpan(
-              text: suggestion.name,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
+            TextSpan(text: suggestion.name),
             TextSpan(
               text: ' · $where',
-              style: theme.textTheme.labelLarge?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
