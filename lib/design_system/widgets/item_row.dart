@@ -5,7 +5,8 @@ import 'package:moms_list/design_system/widgets/ruled_row.dart';
 ///
 /// A [checked] item is crossed out in muted ink. There's no checkbox: the
 /// strike-through and the Got it section say what's done, and VoiceOver
-/// reads the checked state.
+/// reads the checked state. The row is opaque paper, so one gliding past
+/// others (see `GlidingColumn`) covers them.
 class ItemRow extends StatelessWidget {
   const new({
     required this.name,
@@ -38,6 +39,7 @@ class ItemRow extends StatelessWidget {
     return Semantics(
       checked: checked,
       child: RuledRow(
+        color: theme.colorScheme.surface,
         onTap: onTap,
         onLongPress: onLongPress,
         child: Text(name, style: style),

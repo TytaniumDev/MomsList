@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/grocery/data/in_memory_grocery_repository.dart';
 import 'package:moms_list/features/grocery/grocery.dart';
 import 'package:moms_list/features/grocery/presentation/grocery_item_list.dart';
@@ -26,6 +27,30 @@ void main() {
       expect(eggs, lessThan(heading));
       expect(heading, lessThan(coffee));
       expect(find.text('Milk'), findsNothing);
+    });
+
+    testWidgets('glides a checked item down to Got it and back', (
+      tester,
+    ) async {
+      final repository = await seededGroceries();
+      await pumpList(tester, repository);
+      final eggsId = GroceryItem.idFor(storeId: 'costco', name: 'Eggs');
+      final from = tester.getTopLeft(find.text('Eggs')).dy;
+
+      await repository.setChecked(eggsId, checked: true);
+      await tester.pump();
+      await tester.pump();
+      await tester.pump(AppMotion.standard ~/ 2);
+      final midway = tester.getTopLeft(find.text('Eggs')).dy;
+      await tester.pumpAndSettle();
+      final to = tester.getTopLeft(find.text('Eggs')).dy;
+
+      expect(to, greaterThan(tester.getTopLeft(find.text('Got it (2)')).dy));
+      expect(midway, inExclusiveRange(from, to));
+
+      await repository.setChecked(eggsId, checked: false);
+      await tester.pumpAndSettle();
+      expect(tester.getTopLeft(find.text('Eggs')).dy, from);
     });
 
     testWidgets('says when there is nothing to get', (tester) async {

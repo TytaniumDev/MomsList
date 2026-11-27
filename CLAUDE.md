@@ -46,8 +46,8 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   `AppTheme.blackPad()` for dark mode, following the phone, plus
   `NotepadColors`) and one widget per component (`PageScaffold`,
   `EntryRow`, `CoverIconButton`, `ItemRow`, `GotItBand`, `StoreRow`,
-  `SuggestionRow`, `ConfirmDialog`, `EmptyState`, `FadeSwitcher`, with
-  `RuledRow` and `MarginLine` underneath). Import only
+  `SuggestionRow`, `ConfirmDialog`, `EmptyState`, `FadeSwitcher`,
+  `GlidingColumn`, with `RuledRow` and `MarginLine` underneath). Import only
   `package:moms_list/design_system/design_system.dart`.
   - Features build screens from these widgets and read colors through the
     theme, never raw colors or numbers. `ColorScheme.primary` is the
@@ -59,8 +59,9 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   - Sizes are designed at 375pt wide and text scale 1.0, which is Mom's
     real setup.
 - Every big UI change (a page's state, a dropdown, one list replacing
-  another) gets a brief, smooth transition instead of a jump: `FadeSwitcher`
-  between keyed states, `AppMotion` durations and curves for anything else.
+  another, rows moving) gets a brief, smooth transition instead of a jump:
+  `FadeSwitcher` between keyed states, `GlidingColumn` for keyed rows that
+  move, `AppMotion` durations and curves for anything else.
   Animate only opacity, transforms and clips, never layout on each frame.
   Read durations through `AppMotion.durationOf`, and only slide when
   `AppMotion.allowsMovementOf` (Reduce Motion means fades only).
