@@ -4,6 +4,7 @@ import 'package:moms_list/app/view/full_size_app_bar_title.dart';
 import 'package:moms_list/features/feedback/feedback.dart';
 import 'package:moms_list/features/grocery/application/current_store.dart';
 import 'package:moms_list/features/grocery/application/grocery_providers.dart';
+import 'package:moms_list/features/grocery/presentation/margin_line.dart';
 import 'package:moms_list/features/grocery/presentation/new_store_field.dart';
 import 'package:moms_list/features/grocery/presentation/store_tile.dart';
 import 'package:moms_list/l10n/l10n.dart';
@@ -36,16 +37,24 @@ class StorePickerPage extends ConsumerWidget {
       body: SafeArea(
         child: ListView(
           children: [
-            for (final store in stores)
-              StoreTile(
-                key: ValueKey(store.id),
-                store: store,
-                selected: store.id == currentId,
-                onTap: () {
-                  ref.read(selectedStoreIdProvider.notifier).select(store.id);
-                  close();
-                },
+            MarginLine(
+              child: Column(
+                children: [
+                  for (final store in stores)
+                    StoreTile(
+                      key: ValueKey(store.id),
+                      store: store,
+                      selected: store.id == currentId,
+                      onTap: () {
+                        ref
+                            .read(selectedStoreIdProvider.notifier)
+                            .select(store.id);
+                        close();
+                      },
+                    ),
+                ],
               ),
+            ),
             NewStoreField(onAdded: close),
           ],
         ),

@@ -4,7 +4,7 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// [AppBar] caps its title's text size at about 1.3x, but Mom reads at
 /// about 3x, so a normal title is far smaller than the rest of the page.
-/// This title uses the system text size again, as big as the list's items,
+/// This title uses the system text size again, in the `store-title` style,
 /// and wraps instead of being cut off. Give the [AppBar] a matching
 /// [toolbarHeight] so it fits.
 class FullSizeAppBarTitle extends StatelessWidget {
@@ -28,9 +28,7 @@ class FullSizeAppBarTitle extends StatelessWidget {
 
   static TextStyle? _style(BuildContext context) {
     final theme = Theme.of(context);
-    return theme.textTheme.bodyLarge?.copyWith(
-      fontWeight: FontWeight.w800,
-      height: 1.1,
+    return theme.textTheme.titleLarge?.copyWith(
       color: theme.appBarTheme.foregroundColor,
     );
   }

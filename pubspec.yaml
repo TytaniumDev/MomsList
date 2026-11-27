@@ -38,3 +38,14 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+  fonts:
+    # Lato, SIL Open Font License 1.1 (assets/fonts/lato/OFL.txt).
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/lato/Lato_400Regular.ttf
+        - asset: assets/fonts/lato/Lato_700Bold.ttf
+          weight: 700
+        - asset: assets/fonts/lato/Lato_900Black.ttf
+          weight: 900
+  assets:
+    - assets/fonts/lato/OFL.txt

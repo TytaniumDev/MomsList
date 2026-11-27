@@ -4,27 +4,42 @@ import 'package:moms_list/app/app.dart';
 
 void main() {
   group(NotepadColors, () {
-    test('copyWith replaces only the given colours', () {
-      final copy = NotepadColors.light.copyWith(paper: Colors.white);
+    const other = NotepadColors(
+      paperField: Color(0xFFFFFFFF),
+      ruleLine: Color(0xFF000000),
+      marginLine: Color(0xFF00FF00),
+    );
 
-      expect(copy.paper, Colors.white);
-      expect(copy.ruleLine, NotepadColors.light.ruleLine);
-      expect(NotepadColors.light.copyWith().paper, NotepadColors.light.paper);
+    test('copyWith replaces only the given colours', () {
+      final copy = NotepadColors.legalPad.copyWith(paperField: Colors.white);
+
+      expect(copy.paperField, Colors.white);
+      expect(copy.ruleLine, AppColors.rule);
+      expect(copy.marginLine, AppColors.margin);
+      expect(
+        NotepadColors.legalPad.copyWith(ruleLine: Colors.black).ruleLine,
+        Colors.black,
+      );
+      expect(
+        NotepadColors.legalPad.copyWith(marginLine: Colors.green).marginLine,
+        Colors.green,
+      );
     });
 
     test('lerp blends towards the other colours', () {
-      final halfway = NotepadColors.light.lerp(NotepadColors.dark, 1);
+      final end = NotepadColors.legalPad.lerp(other, 1);
 
-      expect(halfway.paper, NotepadColors.dark.paper);
-      expect(halfway.ruleLine, NotepadColors.dark.ruleLine);
-      expect(NotepadColors.light.lerp(null, 0.5), NotepadColors.light);
+      expect(end.paperField, other.paperField);
+      expect(end.ruleLine, other.ruleLine);
+      expect(end.marginLine, other.marginLine);
+      expect(NotepadColors.legalPad.lerp(null, 0.5), NotepadColors.legalPad);
     });
 
     testWidgets('of reads the theme', (tester) async {
       late NotepadColors colors;
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.dark(),
+          theme: AppTheme.legalPad(),
           home: Builder(
             builder: (context) {
               colors = NotepadColors.of(context);
@@ -34,7 +49,7 @@ void main() {
         ),
       );
 
-      expect(colors, NotepadColors.dark);
+      expect(colors, NotepadColors.legalPad);
     });
   });
 }

@@ -1,4 +1,6 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/app/theme/app_spacing.dart';
+import 'package:moms_list/app/theme/notepad_colors.dart';
 
 /// A big, high-contrast text box with a button beside it, for typing a new
 /// item or store. Pressing return does the same as the button.
@@ -25,20 +27,26 @@ class TextEntryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(4),
-      borderSide: BorderSide(color: theme.colorScheme.onSurface, width: 3),
+      borderRadius: BorderRadius.circular(AppRadii.sm),
+      borderSide: BorderSide(
+        color: theme.colorScheme.onSurface,
+        width: AppStrokes.field,
+      ),
     );
 
     return Container(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         border: Border(
-          bottom: BorderSide(color: theme.colorScheme.onSurface, width: 3),
+          bottom: BorderSide(
+            color: theme.colorScheme.onSurface,
+            width: AppStrokes.heavy,
+          ),
         ),
       ),
       child: Row(
-        spacing: 6,
+        spacing: AppSpacing.sm,
         children: [
           Expanded(
             child: TextField(
@@ -51,14 +59,16 @@ class TextEntryRow extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: hintText,
                 isDense: true,
-                // Tall enough to tap at small text sizes, without extra
-                // padding at large ones.
-                constraints: const BoxConstraints(minHeight: 48),
                 filled: true,
-                fillColor: theme.colorScheme.surface,
+                fillColor: NotepadColors.of(context).paperField,
+                hintStyle: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                // A 24pt line plus this padding makes the box as tall as
+                // the button beside it (48pt) at Mom's text size.
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 6,
-                  vertical: 6,
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.row,
                 ),
                 border: border,
                 enabledBorder: border,

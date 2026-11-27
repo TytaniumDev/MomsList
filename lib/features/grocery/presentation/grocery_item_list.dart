@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/app/theme/app_spacing.dart';
 import 'package:moms_list/features/grocery/application/grocery_providers.dart';
 import 'package:moms_list/features/grocery/domain/grocery_item.dart';
 import 'package:moms_list/features/grocery/presentation/grocery_item_tile.dart';
+import 'package:moms_list/features/grocery/presentation/margin_line.dart';
 import 'package:moms_list/features/grocery/presentation/ruled_row.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
@@ -19,13 +21,15 @@ class GroceryItemList extends ConsumerWidget {
     final toGet = items.where((item) => !item.checked).toList();
     final gotIt = items.where((item) => item.checked).toList();
 
-    return ListView(
-      children: [
-        for (final item in toGet) _tile(item),
-        if (toGet.isEmpty) const _NothingToGet(),
-        if (gotIt.isNotEmpty) _GotItHeading(count: gotIt.length),
-        for (final item in gotIt) _tile(item),
-      ],
+    return MarginLine(
+      child: ListView(
+        children: [
+          for (final item in toGet) _tile(item),
+          if (toGet.isEmpty) const _NothingToGet(),
+          if (gotIt.isNotEmpty) _GotItHeading(count: gotIt.length),
+          for (final item in gotIt) _tile(item),
+        ],
+      ),
     );
   }
 
@@ -57,20 +61,26 @@ class _GotItHeading extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: RuledRow.padding,
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSpacing.textInset,
+        AppSpacing.md,
+        AppSpacing.row,
+        AppSpacing.md,
+      ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
         border: Border(
-          top: BorderSide(color: theme.colorScheme.onSurface, width: 3),
+          top: BorderSide(
+            color: theme.colorScheme.onSurface,
+            width: AppStrokes.heavy,
+          ),
         ),
       ),
       child: Semantics(
         header: true,
         child: Text(
           context.l10n.gotItHeading(count),
-          style: theme.textTheme.labelLarge?.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
+          style: theme.textTheme.titleSmall,
         ),
       ),
     );

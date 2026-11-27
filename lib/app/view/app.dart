@@ -13,10 +13,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       onGenerateTitle: (context) => context.l10n.appTitle,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      highContrastTheme: AppTheme.light(highContrast: true),
-      highContrastDarkTheme: AppTheme.dark(highContrast: true),
+      // One theme: the legal pad stays yellow in dark mode too.
+      theme: AppTheme.legalPad(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const AuthGate(),

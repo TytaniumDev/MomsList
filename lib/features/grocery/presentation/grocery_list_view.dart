@@ -72,11 +72,6 @@ class _GroceryListViewState extends ConsumerState<GroceryListView> {
             onPressed: () => _add(_controller.text),
             tooltip: l10n.addItemButtonTooltip,
             iconSize: iconSize,
-            style: IconButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
             icon: const Icon(Icons.add),
           ),
         ),

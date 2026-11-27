@@ -1,48 +1,55 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/app/theme/app_colors.dart';
 
-/// The ruled-paper colours of Mom's lists, so they look like the notepad
-/// she is used to (and the app icon).
+/// The legal pad's colours that Material's [ColorScheme] has no slot for.
 ///
-/// Read with `Theme.of(context).extension<NotepadColors>()!`, or
-/// [NotepadColors.of].
+/// Read with [NotepadColors.of].
 @immutable
 class NotepadColors extends ThemeExtension<NotepadColors> {
-  const new({required this.paper, required this.ruleLine});
+  const new({
+    required this.paperField,
+    required this.ruleLine,
+    required this.marginLine,
+  });
 
-  /// Cream paper with blue rule lines.
-  static const light = NotepadColors(
-    paper: Color(0xFFFFFDF4),
-    ruleLine: Color(0xFF8DB8E8),
+  /// The Legal pad theme's values.
+  static const legalPad = NotepadColors(
+    paperField: AppColors.paperField,
+    ruleLine: AppColors.rule,
+    marginLine: AppColors.margin,
   );
 
-  /// Dark paper with dim blue rule lines.
-  static const dark = NotepadColors(
-    paper: Color(0xFF121212),
-    ruleLine: Color(0xFF3E5F84),
-  );
-
-  /// Background of list pages.
-  final Color paper;
+  /// Fill of text fields and dialogs: a lighter sheet on the paper.
+  final Color paperField;
 
   /// Line under each row. Decorative, so it doesn't need text contrast.
   final Color ruleLine;
+
+  /// Red line down the left of a list. Decorative.
+  final Color marginLine;
 
   /// The [NotepadColors] of the nearest [Theme].
   static NotepadColors of(BuildContext context) =>
       Theme.of(context).extension<NotepadColors>()!;
 
   @override
-  NotepadColors copyWith({Color? paper, Color? ruleLine}) => NotepadColors(
-    paper: paper ?? this.paper,
+  NotepadColors copyWith({
+    Color? paperField,
+    Color? ruleLine,
+    Color? marginLine,
+  }) => NotepadColors(
+    paperField: paperField ?? this.paperField,
     ruleLine: ruleLine ?? this.ruleLine,
+    marginLine: marginLine ?? this.marginLine,
   );
 
   @override
   NotepadColors lerp(NotepadColors? other, double t) {
     if (other == null) return this;
     return NotepadColors(
-      paper: Color.lerp(paper, other.paper, t)!,
+      paperField: Color.lerp(paperField, other.paperField, t)!,
       ruleLine: Color.lerp(ruleLine, other.ruleLine, t)!,
+      marginLine: Color.lerp(marginLine, other.marginLine, t)!,
     );
   }
 }

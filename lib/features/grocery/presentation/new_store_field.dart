@@ -41,16 +41,7 @@ class _NewStoreFieldState extends ConsumerState<NewStoreField> {
       controller: _controller,
       hintText: l10n.newStoreHint,
       onSubmitted: (_) => _add(),
-      button: FilledButton(
-        onPressed: _add,
-        style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          textStyle: Theme.of(context).textTheme.bodyLarge
-              ?.copyWith(fontWeight: FontWeight.w800),
-        ),
-        child: Text(l10n.addStoreButton),
-      ),
+      button: FilledButton(onPressed: _add, child: Text(l10n.addStoreButton)),
     );
   }
 }
