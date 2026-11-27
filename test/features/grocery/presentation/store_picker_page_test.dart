@@ -72,6 +72,16 @@ void main() {
       expect(find.text('Costco'), findsNothing);
     });
 
+    testWidgets('meets accessibility guidelines in dark mode', (tester) async {
+      await tester.pumpApp(
+        const StorePickerPage(),
+        brightness: Brightness.dark,
+        overrides: groceryOverrides(await seededGroceries()),
+      );
+
+      await tester.expectAccessibilityGuidelines();
+    });
+
     for (final MapEntry(key: name, value: scale)
         in textScalesUnderTest.entries) {
       testWidgets('meets accessibility guidelines at $name text size', (

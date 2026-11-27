@@ -38,10 +38,13 @@ The codebase follows Very Good Ventures conventions (Very Good Core template,
   `context.l10n`.
 - Keep modules small and single-purpose; prefer extracting a reusable widget
   over growing a file.
-- Styling follows the Mom's List design system (Legal pad look, Lato type):
-  one theme, `AppTheme.legalPad()`. Use the tokens in `lib/app/theme/`
+- Styling follows the Mom's List design system (Lato type):
+  `AppTheme.legalPad()` in light mode and `AppTheme.blackPad()` in dark
+  mode, following the phone. Use the tokens in `lib/app/theme/`
   (`AppColors`, `AppSpacing`, `AppRadii`, `AppStrokes`, the text theme and
-  `NotepadColors`) instead of raw colors or numbers. Sizes are designed at
+  `NotepadColors`) through the theme instead of raw colors or numbers.
+  `ColorScheme.primary` is the accent blue for marks on the paper; filled
+  buttons and the app bar use the navy cover. Sizes are designed at
   375pt wide and text scale 1.0, which is Mom's real setup.
 - Never clamp or override `TextScaler`. Layouts must reflow (wrap, scroll,
   stack vertically) instead of truncating at large text sizes.

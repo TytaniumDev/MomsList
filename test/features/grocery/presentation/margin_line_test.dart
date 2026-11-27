@@ -17,7 +17,7 @@ void main() {
         ),
       );
       final painter = paint.foregroundPainter! as MarginLinePainter;
-      expect(painter.color, AppColors.margin);
+      expect(painter.color, AppColors.legalPad.margin);
       expect(
         find.byType(MarginLine),
         paints..rect(rect: const Rect.fromLTWH(12, 0, 2, 874)),
@@ -25,14 +25,14 @@ void main() {
     });
 
     test('repaints only when the colour changes', () {
-      final red = MarginLinePainter(color: AppColors.margin);
+      final red = MarginLinePainter(color: AppColors.legalPad.margin);
 
       expect(
-        red.shouldRepaint(MarginLinePainter(color: AppColors.margin)),
+        red.shouldRepaint(MarginLinePainter(color: AppColors.legalPad.margin)),
         isFalse,
       );
       expect(
-        red.shouldRepaint(MarginLinePainter(color: AppColors.rule)),
+        red.shouldRepaint(MarginLinePainter(color: AppColors.legalPad.rule)),
         isTrue,
       );
     });
