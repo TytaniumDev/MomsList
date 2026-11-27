@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/theme/app_colors.dart';
+import 'package:moms_list/design_system/tokens/app_colors.dart';
 
 /// The pad's colours that Material's [ColorScheme] has no slot for.
 ///

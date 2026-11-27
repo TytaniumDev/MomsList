@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/theme/app_colors.dart';
-import 'package:moms_list/app/theme/app_spacing.dart';
-import 'package:moms_list/app/theme/app_text_theme.dart';
-import 'package:moms_list/app/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/tokens/app_colors.dart';
+import 'package:moms_list/design_system/tokens/app_spacing.dart';
+import 'package:moms_list/design_system/tokens/app_text_theme.dart';
 
 /// The app's themes from Mom's List design system
 /// (https://claude.ai/artifact/LAZBw61TibWwNXD6CKWv1G): a pad with a navy
@@ -52,7 +52,10 @@ abstract final class AppTheme {
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: colors.paperField,
-        shape: controlShape,
+        // A lighter sheet with an ink edge, so it stands off the page.
+        shape: controlShape.copyWith(
+          side: BorderSide(color: colors.ink, width: AppStrokes.field),
+        ),
         titleTextStyle: textTheme.headlineSmall,
         contentTextStyle: textTheme.bodyLarge,
       ),

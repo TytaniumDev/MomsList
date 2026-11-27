@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/theme/app_spacing.dart';
-import 'package:moms_list/app/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/tokens/app_spacing.dart';
 
 /// Draws the legal pad's red margin line down the left of [child], the
 /// whole way down like on paper. Row text starts just past it, at

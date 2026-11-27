@@ -1,11 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/theme/notepad_colors.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/grocery/application/grocery_controller.dart';
 import 'package:moms_list/features/grocery/application/grocery_providers.dart';
 import 'package:moms_list/features/grocery/presentation/grocery_item_list.dart';
 import 'package:moms_list/features/grocery/presentation/suggestion_list.dart';
-import 'package:moms_list/features/grocery/presentation/text_entry_row.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
 /// A store's list with the box for adding items at the top.
@@ -54,8 +53,6 @@ class _GroceryListViewState extends ConsumerState<GroceryListView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final iconSize = MediaQuery.textScalerOf(context).scale(24);
-    final notepad = NotepadColors.of(context);
     final suggestions = ref.watch(
       itemSuggestionsForProvider(
         storeId: widget.storeId,
@@ -65,22 +62,15 @@ class _GroceryListViewState extends ConsumerState<GroceryListView> {
 
     return Column(
       children: [
-        TextEntryRow(
+        EntryRow(
           controller: _controller,
           focusNode: _focusNode,
           hintText: l10n.addItemHint,
           onSubmitted: _add,
-          button: IconButton.filled(
-            onPressed: () => _add(_controller.text),
+          button: CoverIconButton(
+            icon: Icons.add,
             tooltip: l10n.addItemButtonTooltip,
-            iconSize: iconSize,
-            // The navy cover, like the other filled buttons, rather than
-            // the lighter blue used for marks on the paper.
-            style: IconButton.styleFrom(
-              backgroundColor: notepad.cover,
-              foregroundColor: notepad.onCover,
-            ),
-            icon: const Icon(Icons.add),
+            onPressed: () => _add(_controller.text),
           ),
         ),
         Expanded(

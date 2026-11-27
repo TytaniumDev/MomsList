@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:moms_list/design_system/design_system.dart';
 import 'package:moms_list/features/grocery/application/grocery_providers.dart';
 import 'package:moms_list/features/grocery/domain/store.dart';
-import 'package:moms_list/features/grocery/presentation/ruled_row.dart';
 import 'package:moms_list/l10n/l10n.dart';
 
-/// A store in the store picker, with how many items are left to get there.
-/// The store showing now is highlighted and ticked.
+/// A store in the store picker, as a [StoreRow] with how many items are
+/// left to get there.
 class StoreTile extends ConsumerWidget {
   const new({
     required this.store,
@@ -21,42 +21,14 @@ class StoreTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
     final items = ref.watch(storeItemsProvider(store.id)).value ?? const [];
     final toGet = items.where((item) => !item.checked).length;
 
-    return Semantics(
+    return StoreRow(
+      name: store.name,
+      countLabel: context.l10n.storeItemsToGet(toGet),
       selected: selected,
-      child: RuledRow(
-        color: selected ? theme.colorScheme.secondaryContainer : null,
-        onTap: onTap,
-        child: Row(
-          spacing: 6,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(store.name, style: theme.textTheme.bodyLarge),
-                  Text(
-                    l10n.storeItemsToGet(toGet),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (selected)
-              Icon(
-                Icons.check,
-                size: MediaQuery.textScalerOf(context).scale(24),
-                color: theme.colorScheme.primary,
-              ),
-          ],
-        ),
-      ),
+      onTap: onTap,
     );
   }
 }

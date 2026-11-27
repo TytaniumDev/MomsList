@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:moms_list/app/app.dart';
+import 'package:moms_list/design_system/design_system.dart';
 
 void main() {
   group(NotepadColors, () {
